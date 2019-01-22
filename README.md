@@ -31,12 +31,6 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 @Component
 public class SwaggerListener implements ApplicationListener<ContextRefreshedEvent> {
-
-    @Autowired
-    private DocumentationCache documentationCache;
-    
-    @Autowired
-    private ServiceModelToSwagger2Mapper mapper;
     
     @Value("${api.server}")
     private String apiServer;
@@ -47,16 +41,7 @@ public class SwaggerListener implements ApplicationListener<ContextRefreshedEven
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         if (contextRefreshedEvent.getApplicationContext().getParent() != null) {
-            new Thread(
-                    () -> {
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        SwaggerUtils.postSwagger(apiServer, uniqueKey, documentationCache, mapper);
-                    })
-                    .start();
+            SwaggerUtils.postSwagger(apiServer, uniqueKey, contextRefreshedEvent.getApplicationContext());
         }
     }
 }
