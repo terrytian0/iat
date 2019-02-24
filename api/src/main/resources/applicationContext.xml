@@ -4,6 +4,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
@@ -11,7 +12,9 @@
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx.xsd ">
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-4.1.xsd">
 
     <context:component-scan base-package="com.terry.iat"/>
 
@@ -84,7 +87,7 @@
         <!-- 数据源 -->
         <property name="dataSource" ref="dynamicDataSource"/>
     </bean>
-    <tx:annotation-driven proxy-target-class="false" transaction-manager="transactionManager" />
+    <tx:annotation-driven proxy-target-class="false" transaction-manager="transactionManager"/>
     <!-- 通知 -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
@@ -102,8 +105,10 @@
     </tx:advice>
 
     <aop:config>
-        <aop:pointcut id="service" expression="execution(* com.terry.iat.dao.mapper..*.*(..)))" />
-        <aop:advisor pointcut-ref="service" advice-ref="txAdvice" order="2" />
-        <aop:advisor pointcut-ref="service" advice-ref="dataSourceExchange" order="1" />
+        <aop:pointcut id="service" expression="execution(* com.terry.iat.dao.mapper..*.*(..)))"/>
+        <aop:advisor pointcut-ref="service" advice-ref="txAdvice" order="2"/>
+        <aop:advisor pointcut-ref="service" advice-ref="dataSourceExchange" order="1"/>
     </aop:config>
+    <task:scheduler id="iat-scheduler" pool-size="20"/>
+    <task:annotation-driven scheduler="iat-scheduler"/>
 </beans>

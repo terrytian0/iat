@@ -71,8 +71,7 @@ public class TestcaseKeywordApiServiceImpl extends BaseServiceImpl
         List<KeywordEntity> keywordsEntityList = keywordsService.getByIds(ids);
         Map<Long, KeywordEntity> keywordEntityMap = new HashMap<>();
         keywordsEntityList.forEach(k -> keywordEntityMap.put(k.getId(), k));
-        testcaseKeywordsApiEntityList.forEach(
-                tk -> tk.setDetail(keywordEntityMap.get(tk.getKeywordId())));
+        testcaseKeywordsApiEntityList.forEach(tk -> tk.setDetail(keywordEntityMap.get(tk.getKeywordId())));
         return testcaseKeywordsApiEntityList;
     }
 
@@ -80,45 +79,45 @@ public class TestcaseKeywordApiServiceImpl extends BaseServiceImpl
     public void updateIdx(TestcaseIndexVO testcaseIndexVO) {
         List<TestcaseKeywordApiEntity> testcaseKeywordApiEntityList = getByTestcaseId(testcaseIndexVO.getTestcaseId());
         TestcaseKeywordApiEntity testcaseKeywordApiEntity = testcaseKeywordsApiMapper.selectByPrimaryKey(testcaseIndexVO.getTestcaseKeywordId());
-        if(testcaseIndexVO.getIndex()== Index.UP){
-            keywordApiUp(testcaseKeywordApiEntityList,testcaseKeywordApiEntity);
-        }else if(testcaseIndexVO.getIndex()== Index.DOWN){
-            keywordApiDown(testcaseKeywordApiEntityList,testcaseKeywordApiEntity);
-        }else if(testcaseIndexVO.getIndex()== Index.FIRST){
+        if (testcaseIndexVO.getIndex() == Index.UP) {
+            keywordApiUp(testcaseKeywordApiEntityList, testcaseKeywordApiEntity);
+        } else if (testcaseIndexVO.getIndex() == Index.DOWN) {
+            keywordApiDown(testcaseKeywordApiEntityList, testcaseKeywordApiEntity);
+        } else if (testcaseIndexVO.getIndex() == Index.FIRST) {
             keywordApiFirst(testcaseKeywordApiEntity);
-        }else if(testcaseIndexVO.getIndex()== Index.LAST){
-            testcaseKeywordLast(testcaseKeywordApiEntityList.size(),testcaseKeywordApiEntity);
+        } else if (testcaseIndexVO.getIndex() == Index.LAST) {
+            testcaseKeywordLast(testcaseKeywordApiEntityList.size(), testcaseKeywordApiEntity);
         }
     }
 
     private void testcaseKeywordLast(Integer count, TestcaseKeywordApiEntity testcaseKeywordApiEntity) {
-        if(testcaseKeywordApiEntity.getIdx()==count){
+        if (testcaseKeywordApiEntity.getIdx() == count) {
             return;
         }
-        testcaseKeywordsApiMapper.updateLast(testcaseKeywordApiEntity.getTestcaseId(),testcaseKeywordApiEntity.getIdx());
+        testcaseKeywordsApiMapper.updateLast(testcaseKeywordApiEntity.getTestcaseId(), testcaseKeywordApiEntity.getIdx());
         testcaseKeywordApiEntity.setIdx(count);
         testcaseKeywordsApiMapper.updateByPrimaryKey(testcaseKeywordApiEntity);
     }
 
     private void keywordApiFirst(TestcaseKeywordApiEntity testcaseKeywordApiEntity) {
-        if(testcaseKeywordApiEntity.getIdx()==1){
+        if (testcaseKeywordApiEntity.getIdx() == 1) {
             return;
         }
-        testcaseKeywordsApiMapper.updateFrist(testcaseKeywordApiEntity.getKeywordId(),testcaseKeywordApiEntity.getIdx());
+        testcaseKeywordsApiMapper.updateFrist(testcaseKeywordApiEntity.getKeywordId(), testcaseKeywordApiEntity.getIdx());
         testcaseKeywordApiEntity.setIdx(1);
         testcaseKeywordsApiMapper.updateByPrimaryKey(testcaseKeywordApiEntity);
     }
 
     private void keywordApiDown(List<TestcaseKeywordApiEntity> testcaseKeywordApiEntityList, TestcaseKeywordApiEntity testcaseKeywordApiEntity) {
-        if(testcaseKeywordApiEntity.getIdx()==testcaseKeywordApiEntityList.size()){
+        if (testcaseKeywordApiEntity.getIdx() == testcaseKeywordApiEntityList.size()) {
             return;
         }
-        int idx = testcaseKeywordApiEntity.getIdx()+1;
+        int idx = testcaseKeywordApiEntity.getIdx() + 1;
         testcaseKeywordApiEntity.setIdx(idx);
         testcaseKeywordsApiMapper.updateByPrimaryKey(testcaseKeywordApiEntity);
-        for(TestcaseKeywordApiEntity tkae:testcaseKeywordApiEntityList){
-            if(tkae.getIdx()==idx){
-                tkae.setIdx(idx-1);
+        for (TestcaseKeywordApiEntity tkae : testcaseKeywordApiEntityList) {
+            if (tkae.getIdx() == idx) {
+                tkae.setIdx(idx - 1);
                 testcaseKeywordsApiMapper.updateByPrimaryKey(tkae);
                 break;
             }
@@ -126,15 +125,15 @@ public class TestcaseKeywordApiServiceImpl extends BaseServiceImpl
     }
 
     private void keywordApiUp(List<TestcaseKeywordApiEntity> testcaseKeywordApiEntityList, TestcaseKeywordApiEntity testcaseKeywordApiEntity) {
-        if(testcaseKeywordApiEntity.getIdx()==1){
+        if (testcaseKeywordApiEntity.getIdx() == 1) {
             return;
         }
-        int idx = testcaseKeywordApiEntity.getIdx()-1;
+        int idx = testcaseKeywordApiEntity.getIdx() - 1;
         testcaseKeywordApiEntity.setIdx(idx);
         testcaseKeywordsApiMapper.updateByPrimaryKey(testcaseKeywordApiEntity);
-        for(TestcaseKeywordApiEntity tkae:testcaseKeywordApiEntityList){
-            if(tkae.getIdx()==idx){
-                tkae.setIdx(idx+1);
+        for (TestcaseKeywordApiEntity tkae : testcaseKeywordApiEntityList) {
+            if (tkae.getIdx() == idx) {
+                tkae.setIdx(idx + 1);
                 testcaseKeywordsApiMapper.updateByPrimaryKey(tkae);
                 break;
             }

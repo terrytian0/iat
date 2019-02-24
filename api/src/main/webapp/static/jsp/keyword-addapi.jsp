@@ -36,7 +36,7 @@
 </div>
 <div id="toolbar" class="btn-group">
     <div>
-        <select class="form-control m-b" id="service" style="height: 30px" onchange="refreshApiTable()">
+        <select class="form-control m-b" id="apiService" style="height: 30px" onchange="refreshApiTable()">
         </select>
     </div>
 </div>
@@ -67,16 +67,16 @@
     });
 
     window.onload = function () {
-        getService($.cookie("Authentication"));
+        getApiService($.cookie("Authentication"));
         var serviceId = localStorage.getItem("serviceId")
         if (serviceId != null) {
-            $("#service").find("option[key='" + serviceId + "']").attr("selected", true);
+            $("#apiService").find("option[key='" + serviceId + "']").attr("selected", true);
         }
         initApiTable();
     };
 
     function refreshApiTable() {
-        var serviceId = $("#service option:selected").attr("key");
+        var serviceId = $("#apiService option:selected").attr("key");
         localStorage.setItem("serviceId", serviceId);
         $('#apiTable').bootstrapTable('refresh', {
             pageNumber: 1,
@@ -91,7 +91,7 @@
         if (serviceId != null) {
             $("#keywordService").find("option[key='" + serviceId + "']").attr("selected", true);
         }
-        serviceId = $("#service option:selected").attr("key");
+        serviceId = $("#apiService option:selected").attr("key");
         $('#apiTable').bootstrapTable({
             method: 'get',
             contentType: "application/json; charset=utf-8",

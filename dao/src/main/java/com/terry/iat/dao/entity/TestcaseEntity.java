@@ -9,8 +9,11 @@ import java.util.List;
 
 
 /**
+ * @Description TODO
  * @author terry
- */
+ * @Date 2019/2/23 10:53
+ * @Version 1.0 
+ **/
 @Data
 @Table(name="testcase")
 public class TestcaseEntity extends BaseEntity {

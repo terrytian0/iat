@@ -7,8 +7,11 @@ import javax.persistence.*;
 
 
 /**
+ * @Description TODO
  * @author terry
- */
+ * @Date 2019/2/23 10:54
+ * @Version 1.0 
+ **/
 @Data
 @Table(name="form_data")
 public class FormDataEntity extends BaseEntity {

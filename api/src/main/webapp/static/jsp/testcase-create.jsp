@@ -97,7 +97,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "创建测试用例失败，errormsg=" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }

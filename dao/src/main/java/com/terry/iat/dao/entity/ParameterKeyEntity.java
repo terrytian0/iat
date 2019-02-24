@@ -9,6 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
+/**
+ * @Description TODO
+ * @author terry
+ * @Date 2019/2/23 10:54
+ * @Version 1.0 
+ **/
 @Data
 @Table(name="parameter_key")
 public class ParameterKeyEntity extends BaseEntity {

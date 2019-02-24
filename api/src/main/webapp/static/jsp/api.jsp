@@ -33,7 +33,7 @@
 </div>
 <div id="toolbar" class="btn-group">
     <div>
-        <select class="form-control m-b" id="service" style="height: 30px" onchange="refreshApiTable()">
+        <select class="form-control m-b" id="apiService" style="height: 30px" onchange="refreshApiTable()">
         </select>
     </div>
 </div>
@@ -64,19 +64,19 @@
     });
 
     window.onload = function () {
-        getService($.cookie("Authentication"));
+        getApiService($.cookie("Authentication"));
         var serviceId = localStorage.getItem("serviceId")
         if (serviceId != undefined) {
-            $("#service").find("option[key='" + serviceId + "']").attr("selected", true);
+            $("#apiService").find("option[key='" + serviceId + "']").attr("selected", true);
         }else{
-            serviceId = $("#service option:selected").attr("key");
+            serviceId = $("#apiService option:selected").attr("key");
             localStorage.setItem("serviceId",serviceId);
         }
         initApiTable();
     };
 
     function refreshApiTable() {
-        var serviceId = $("#service option:selected").attr("key");
+        var serviceId = $("#apiService option:selected").attr("key");
         localStorage.setItem("serviceId", serviceId);
         $('#apiTable').bootstrapTable('refresh', {
             pageNumber: 1,
@@ -86,7 +86,7 @@
     };
 
     function initApiTable() {
-        var serviceId = $("#service option:selected").attr("key");
+        var serviceId = $("#apiService option:selected").attr("key");
         $('#apiTable').bootstrapTable({
             method: 'get',
             contentType: "application/json; charset=utf-8",
@@ -202,7 +202,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "删除Api失败！\n" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }

@@ -7,8 +7,11 @@ import javax.persistence.*;
 
 
 /**
+ * @Description TODO
  * @author terry
- */
+ * @Date 2019/2/23 10:54
+ * @Version 1.0 
+ **/
 @Data
 @Table(name="extractor")
 public class ExtractorEntity extends BaseEntity {

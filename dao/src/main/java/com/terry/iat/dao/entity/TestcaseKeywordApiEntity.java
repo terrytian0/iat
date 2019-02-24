@@ -7,8 +7,11 @@ import javax.persistence.*;
 
 
 /**
+ * @Description TODO
  * @author terry
- */
+ * @Date 2019/2/23 10:53
+ * @Version 1.0 
+ **/
 @Data
 @Table(name="testcase_keyword_api")
 public class TestcaseKeywordApiEntity extends BaseEntity implements Comparable<TestcaseKeywordApiEntity>{

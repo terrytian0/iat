@@ -534,6 +534,9 @@
                     data: data,
                     dataType: 'json',
                     contentType: "application/json; charset=utf-8",
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authentication", $.cookie("Authentication"));
+                    },
                     success: function (msg) {
                         if (msg.status) {
                         } else if (msg.code == "D0000104") {

@@ -9,8 +9,11 @@ import java.util.List;
 
 
 /**
+ * @Description TODO
  * @author terry
- */
+ * @Date 2019/2/23 10:54
+ * @Version 1.0 
+ **/
 @Data
 @Table(name="keyword")
 public class KeywordEntity extends BaseEntity {

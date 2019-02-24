@@ -75,6 +75,12 @@
                     </a>
                 </li>
                 <li>
+                    <a class="J_menuItem" href="static/jsp/client.jsp">
+                        <i class="fa fa-bars" style="width: 14px"></i>
+                        <span class="nav-label">客户端管理</span>
+                    </a>
+                </li>
+                <li>
                     <a class="J_menuItem" href="static/jsp/user.jsp">
                         <i class="fa fa-users" style="width: 14px"></i>
                         <span class="nav-label">用户管理</span>

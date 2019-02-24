@@ -8,6 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * @Description TODO
+ * @author terry
+ * @Date 2019/2/23 10:54
+ * @Version 1.0 
+ **/
 @Data
 @Table(name="result_code")
 public class ResultCodeEntity extends BaseEntity {

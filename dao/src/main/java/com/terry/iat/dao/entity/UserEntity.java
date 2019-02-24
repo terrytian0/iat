@@ -10,8 +10,11 @@ import java.util.Set;
 
 
 /**
+ * @Description TODO
  * @author terry
- */
+ * @Date 2019/2/23 10:53
+ * @Version 1.0 
+ **/
 @Data
 @Table(name="user")
 public class UserEntity extends BaseEntity{

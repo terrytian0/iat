@@ -14,69 +14,55 @@ function getDate(str){
     return oTime;
 };
 
-function getService(authentication) {
-    var url = "/service/search?pageNumber=1&pageSize=100";
-    $.ajax({
-        type: "get",
-        dataType: "json",
-        url: url,
-        async:false,
-        contentType: "application/json; charset=utf-8",
-        beforeSend:function (request) {
-            request.setRequestHeader("Authentication",authentication);
-        },
-        success: function (msg) {
-            if (msg.status) {
-                var items = "";
-                $.each(msg.content.list, function (i, item) {
-                    items = items + "<option key='"+item.id+"'>"+item.name+"</option>";
-                });
-                $("#service").html(items);
-            }else if(msg.code=="D0000104"){
-                window.location.href = "/login.jsp";
-            }else{
-                swal({
-                         title: "提示！",
-                         text: msg.errorMsg,
-                         type: "error"
-                     });
-            }
-        }
+function getApiService(authentication) {
+    var content = getService(authentication);
+    var items = "";
+    $.each(content.list, function (i, item) {
+        items = items + "<option key='"+item.id+"'>"+item.name+"</option>";
     });
+    $("#apiService").html(items);
 }
 
 function getKeywordService(authentication) {
-    var url = "/service/search?pageNumber=1&pageSize=100";
-    $.ajax({
-        type: "get",
-        dataType: "json",
-        url: url,
-        async:false,
-        contentType: "application/json; charset=utf-8",
-        beforeSend:function (request) {
-            request.setRequestHeader("Authentication", authentication);
-        },
-        success: function (msg) {
-            if (msg.status) {
-                var items = "";
-                $.each(msg.content.list, function (i, item) {
-                    items = items + "<option key='"+item.id+"'>"+item.name+"</option>";
-                });
-                $("#keywordService").html(items);
-            }else if(msg.code=="D0000104"){
-                window.location.href = "/login.jsp";
-            }else{
-                swal({
-                    title: "提示！",
-                    text: msg.errorMsg,
-                    type: "error"
-                });
-            }
-        }
+    var content = getService(authentication);
+    var items = "";
+    $.each(content.list, function (i, item) {
+        items = items + "<option key='"+item.id+"'>"+item.name+"</option>";
     });
+    $("#keywordService").html(items);
 }
 
 function getTestcaseService(authentication) {
+    var content = getService(authentication);
+    var items = "";
+    $.each(content.list, function (i, item) {
+        items = items + "<option key='"+item.id+"'>"+item.name+"</option>";
+    });
+    $("#testcaseService").html(items);
+}
+
+
+function getTestplanService(authentication) {
+    var content = getService(authentication);
+    var items = "";
+    $.each(content.list, function (i, item) {
+        items = items + "<option key='"+item.id+"'>"+item.name+"</option>";
+    });
+    $("#testplanService").html(items);
+}
+
+
+function getTesttaskService(authentication) {
+    var content = getService(authentication);
+    var items = "";
+    $.each(content.list, function (i, item) {
+        items = items + "<option key='"+item.id+"'>"+item.name+"</option>";
+    });
+    $("#testtaskService").html(items);
+}
+
+function getService(authentication) {
+    var content;
     var url = "/service/search?pageNumber=1&pageSize=100";
     $.ajax({
         type: "get",
@@ -89,24 +75,21 @@ function getTestcaseService(authentication) {
         },
         success: function (msg) {
             if (msg.status) {
-                var items = "";
-                $.each(msg.content.list, function (i, item) {
-                    // items = items + "<li><a onclick=\"shows($(this).text())\">"+item.name+"</a></li>";
-                    items = items + "<option key='"+item.id+"'>"+item.name+"</option>";
-                });
-                $("#testcaseService").html(items);
+                content = msg.content;
             }else if(msg.code=="D0000104"){
                 window.location.href = "/login.jsp";
             }else{
                 swal({
                     title: "提示！",
-                    text: msg.errorMsg,
+                    text: msg.message,
                     type: "error"
                 });
             }
         }
     });
+    return content;
 }
+
 
 
 
@@ -238,6 +221,27 @@ function statusFormatter(value, row, index) {
         return "<a class=\" btn btn-w-m btn-success\">成功</a>";
     } else {
         return "<a class=\" btn btn-w-m btn-danger\" id = \"errormsg\">失败</a>";
+    }
+}
+
+function testStatusFormatter(value, row, index) {
+    if (row.status == undefined) {
+        return;
+    }
+    if (row.status=="SUCCEED") {
+        return "<a class=\" btn btn-w-m btn-success\">成功</a>";
+    } else if(row.status=="FAILED"){
+        return "<a class=\" btn btn-w-m btn-danger\" id = \"errormsg\">失败</a>";
+    }else if(row.status == "RUNNING"){
+        return "<a class=\" btn btn-w-m btn-default\">执行中</a>";
+    }else if(row.status == "TIMEOUT"){
+        return "<a class=\" btn btn-w-m btn-warning\">超时</a>";
+    }else if(row.status == "INTERRUPT"){
+        return "<a class=\" btn btn-w-m btn-warning\">中断</a>";
+    }else if(row.status == "CREATE"){
+        return "<a class=\" btn btn-w-m btn-default\">创建</a>";
+    }else{
+        return value;
     }
 }
 

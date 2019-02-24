@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  **/
 @Component
-@Profile("dev")
 public class SwaggerListener implements ApplicationListener<ContextRefreshedEvent> {
 
     @Value("${api.server}")

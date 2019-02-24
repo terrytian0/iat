@@ -5,7 +5,12 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-/** @author terry */
+/**
+ * @Description TODO
+ * @author terry
+ * @Date 2019/2/23 10:54
+ * @Version 1.0 
+ **/
 @Data
 @Table(name = "keyword_api")
 public class KeywordApiEntity extends BaseEntity implements Comparable<KeywordApiEntity> {

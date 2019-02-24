@@ -60,6 +60,11 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
 
     @Override
     public PageInfo getByServiceId(Integer pn, Integer ps, String searchText, Long serviceId) {
+       return getByServiceIdAndNotInIds(pn,ps,searchText,serviceId,null);
+    }
+
+    @Override
+    public PageInfo getByServiceIdAndNotInIds(Integer pn, Integer ps, String searchText, Long serviceId, List<Long> ids) {
         String key = "%%";
         if (searchText != null) {
             key = new StringBuilder().append("%").append(searchText).append("%").toString();
@@ -69,6 +74,9 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("serviceId", serviceId);
         criteria.andLike("name", key);
+        if(ids!=null&&!ids.isEmpty()){
+            criteria.andNotIn("id",ids);
+        }
         return new PageInfo(testcaseMapper.selectByExample(example));
     }
 
@@ -135,6 +143,11 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
         parameterKeyService.delete(deleteKeys);
         parameterValueService.deleteByKeyIds(deleteKeys);
         return parameterTitles;
+    }
+
+    @Override
+    public List<TestcaseEntity> getByIds(List<Long> testcaseIds) {
+        return testcaseMapper.selectByIds(listToString(testcaseIds));
     }
 
     @Override
