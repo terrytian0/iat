@@ -31,19 +31,22 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <div class="form-group draggable">
-                            <label class="col-sm-1 control-label">名称：</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="serviceName"
-                                       aria-required="true">
+                        <form class="form-horizontal m-t">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label">名称：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="serviceName"
+                                           aria-required="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group draggable">
-                            <label class="col-sm-1 control-label">描述：</label>
-                            <div class="col-sm-8">
-                                <textarea type="text" rows="10" class="form-control" id="serviceDescription"></textarea>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label">描述：</label>
+                                <div class="col-sm-8">
+                                    <textarea type="text" rows="10" class="form-control"
+                                              id="serviceDescription"></textarea>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -209,7 +212,7 @@
                     return msg.content;
                 } else if (msg.code == "D0000104") {
                     window.location.href = "/login.jsp";
-                }else{
+                } else {
                     swal({
                         title: "提示！",
                         text: msg.message,
@@ -250,7 +253,7 @@
             method: 'get',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            url: "/service/user/unadded/get?serviceId="+serviceId,
+            url: "/service/user/unadded/get?serviceId=" + serviceId,
             ajaxOptions: {
                 headers: {
                     "Authentication": $.cookie("Authentication")
@@ -302,7 +305,7 @@
                     return msg.content;
                 } else if (msg.code == "D0000104") {
                     window.location.href = "/login.jsp";
-                }else{
+                } else {
                     swal({
                         title: "提示！",
                         text: msg.message,
@@ -315,8 +318,8 @@
     })
 
     function adduser() {
-        var users= $("#userListTable").bootstrapTable('getSelections');
-        if(users.length==0){
+        var users = $("#userListTable").bootstrapTable('getSelections');
+        if (users.length == 0) {
             swal({
                 title: "提示",
                 text: "请选择……",
@@ -324,23 +327,23 @@
             });
         }
         var data = "{";
-        data = data+ "\"serviceId\":" + serviceId+",";
+        data = data + "\"serviceId\":" + serviceId + ",";
         var userIds = "[";
-        for(var i in users){
-            userIds = userIds+users[i].id;
-            if(i<users.length-1){
-                userIds = userIds+",";
+        for (var i in users) {
+            userIds = userIds + users[i].id;
+            if (i < users.length - 1) {
+                userIds = userIds + ",";
             }
         }
-        userIds = userIds+"]";
-        data = data+ "\"userIds\":" + userIds+"";
-        data = data +  "}";
+        userIds = userIds + "]";
+        data = data + "\"userIds\":" + userIds + "";
+        data = data + "}";
         $.ajax({
             type: "put",
             dataType: "json",
             url: "/service/user/add",
             async: false,
-            data:data,
+            data: data,
             contentType: "application/json; charset=utf-8",
             beforeSend: function (request) {
                 request.setRequestHeader("Authentication", $.cookie("Authentication"));
@@ -386,7 +389,7 @@
                     return msg.content;
                 } else if (msg.code == "D0000104") {
                     window.location.href = "/login.jsp";
-                }else{
+                } else {
                     swal({
                         title: "提示！",
                         text: msg.message,
@@ -488,7 +491,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "删除环境失败。\n" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }
@@ -518,7 +521,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "删除环境失败。\n" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }
@@ -564,7 +567,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "创建服务失败。\n" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }
@@ -598,7 +601,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "创建服务失败。\n" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }

@@ -28,6 +28,8 @@ public class TaskEntity extends BaseEntity{
     private String testplanName;
     @Column(name = "tag")
     private String tag;
+    @Column(name = "env")
+    private String env;
     @Column(name = "pass_rate")
     private Integer passRate;
     @Column(name = "coverage")
@@ -51,6 +53,8 @@ public class TaskEntity extends BaseEntity{
     @Column(name = "update_time")
     private Timestamp updateTime;
 
+    @Transient
+    private Long elapsed;
     @Transient
     private List<TaskTestcaseEntity> testcases;
 }

@@ -5,6 +5,9 @@ import com.github.pagehelper.PageInfo;
 import com.terry.iat.dao.entity.ServiceEntity;
 import com.terry.iat.service.vo.ServiceVO;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author terry
  */
@@ -34,6 +37,8 @@ public interface ServiceService {
      * @return
      */
     ServiceEntity getById(Long id);
+
+    List<ServiceEntity> getByIds(Set<Long> ids);
 
     /**
      * @param uniqueKey

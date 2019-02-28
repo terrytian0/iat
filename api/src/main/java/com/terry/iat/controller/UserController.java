@@ -27,7 +27,7 @@ public class UserController extends BaseController {
     private UserService userService;
 
     @IgnoreLogin
-    @PostMapping(path = "/create")
+    @PostMapping(path = "/register")
     public Result create(@RequestBody @Valid UserVO userVO){
         return success(userService.create(userVO));
     }

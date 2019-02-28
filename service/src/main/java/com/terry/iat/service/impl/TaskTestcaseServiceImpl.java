@@ -72,7 +72,21 @@ public class TaskTestcaseServiceImpl extends BaseServiceImpl implements TaskTest
         Example example = new Example(TaskTestcaseEntity.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("taskId",taskId);
-        return taskTestcaseMapper.selectByExample(example);
+        List<TaskTestcaseEntity> taskTestcaseEntityList =  taskTestcaseMapper.selectByExample(example);
+        for (TaskTestcaseEntity taskTestcaseEntity : taskTestcaseEntityList) {
+            List<TaskTestcaseParameterEntity> taskTestcaseParameterEntityList = taskTestcaseParameterService.getByTaskIdAndTestcaseId(taskId,taskTestcaseEntity.getTestcaseId());
+            String status = "";
+            for (TaskTestcaseParameterEntity taskTestcaseParameterEntity : taskTestcaseParameterEntityList) {
+                if("true".equals(taskTestcaseParameterEntity.getStatus())){
+                    status = "true";
+                }else  if("false".equals(taskTestcaseParameterEntity.getStatus())){
+                    status = "false";
+                    break;
+                }
+            }
+            taskTestcaseEntity.setStatus(status);
+        }
+        return taskTestcaseEntityList;
     }
 
 

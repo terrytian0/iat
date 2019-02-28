@@ -19,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ServiceServiceImpl extends BaseServiceImpl implements ServiceService {
@@ -78,6 +75,17 @@ public class ServiceServiceImpl extends BaseServiceImpl implements ServiceServic
         List<EnvEntity> envEntityList = envService.getByServiceId(id);
         serviceEntity.setEnvs(envEntityList);
         return serviceEntity;
+    }
+
+    @Override
+    public List<ServiceEntity> getByIds(Set<Long> ids) {
+        if(ids.isEmpty()){
+            return Collections.EMPTY_LIST;
+        }
+        Example example = new Example(ServiceEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id", ids);
+        return serviceMapper.selectByExample(example);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.terry.iat.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.terry.iat.service.common.bean.ResultCode;
+import com.terry.iat.service.common.enums.Role;
 import com.terry.iat.service.common.exception.BusinessException;
 import com.terry.iat.dao.entity.UserEntity;
 import com.terry.iat.dao.mapper.UserMapper;
@@ -38,7 +39,11 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
         userEntity = new UserEntity();
         userEntity.setName(userVO.getName());
         userEntity.setPhone(userVO.getPhone());
-        userEntity.setRole(userVO.getRole().name());
+        if(userVO.getRole()==null){
+            userEntity.setRole(Role.NORMAL.name());
+        }else {
+            userEntity.setRole(userVO.getRole().name());
+        }
         userEntity.setPassword(DigestUtils.md5DigestAsHex(userVO.getPassword().getBytes()));
         return userMapper.insert(userEntity);
     }

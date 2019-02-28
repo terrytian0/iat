@@ -31,19 +31,21 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <div class="form-group draggable">
-                            <label class="col-sm-1 control-label">名称：</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="keywordName"
-                                       aria-required="true">
+                        <form class="form-horizontal m-t">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label">名称：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="keywordName" aria-required="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group draggable">
-                            <label class="col-sm-1 control-label">描述：</label>
-                            <div class="col-sm-8">
-                                <textarea type="text" rows="10" class="form-control" id="keywordDescription"></textarea>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label">描述：</label>
+                                <div class="col-sm-8">
+                                    <textarea type="text" rows="10" class="form-control"
+                                              id="keywordDescription"></textarea>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -75,7 +77,7 @@
         var data = "{";
         data = data + "\"serviceId\":" + serviceId + ",";
         data = data + "\"name\":\"" + keywordName + "\",";
-        data = data + "\"description\":\"" + keywordDescription+"\"";
+        data = data + "\"description\":\"" + keywordDescription + "\"";
         data = data + "}";
         $.ajax({
             type: "post",
@@ -96,7 +98,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "创建关键字失败，errormsg=" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }

@@ -7,10 +7,9 @@ import com.terry.iat.service.EnvService;
 import com.terry.iat.service.vo.EnvVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class EnvServiceImpl extends BaseServiceImpl implements EnvService {
@@ -43,6 +42,38 @@ public class EnvServiceImpl extends BaseServiceImpl implements EnvService {
     @Override
     public List<EnvEntity> getByServiceId(Long serviceId) {
         return envMapper.getByServiceId(serviceId);
+    }
+
+    @Override
+    public Map<Long, List<EnvEntity>> getByServiceIds(Set<Long> serviceIds) {
+        if(serviceIds.isEmpty()){
+            return Collections.EMPTY_MAP;
+        }
+        Example example = new Example(EnvEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("serviceId",serviceIds);
+        List<EnvEntity> envEntityList = envMapper.selectByExample(example);
+        Map<Long, List<EnvEntity>> map = new HashMap<>();
+        for (EnvEntity envEntity : envEntityList) {
+            List<EnvEntity> envEntities = map.get(envEntity.getServiceId());
+            if(envEntities==null){
+                envEntities = new ArrayList<>();
+            }
+            envEntities.add(envEntity);
+            map.put(envEntity.getServiceId(),envEntities);
+        }
+        return map;
+    }
+
+    @Override
+    public List<EnvEntity> getByIds(List<Long> ids) {
+        if(ids.isEmpty()){
+            return Collections.EMPTY_LIST;
+        }
+        Example example = new Example(EnvEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id",ids);
+        return envMapper.selectByExample(example);
     }
 
     @Override

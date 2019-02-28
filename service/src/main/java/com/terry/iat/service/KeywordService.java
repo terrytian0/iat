@@ -4,11 +4,10 @@ package com.terry.iat.service;
 import com.github.pagehelper.PageInfo;
 import com.terry.iat.dao.entity.EnvEntity;
 import com.terry.iat.dao.entity.ExtractorEntity;
+import com.terry.iat.dao.entity.KeywordApiEntity;
 import com.terry.iat.dao.entity.KeywordEntity;
 import com.terry.iat.service.core.KeywordResult;
-import com.terry.iat.service.vo.KeywordDebugVO;
-import com.terry.iat.service.vo.KeywordVO;
-import com.terry.iat.service.vo.ParameterVO;
+import com.terry.iat.service.vo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -99,4 +98,19 @@ public interface KeywordService {
      * @return
      */
     KeywordResult debug(KeywordEntity keywordEntity, Map<String, String> parameters, EnvEntity envEntity);
+
+    /**
+     *  向Keyword中添加Api
+     * @param addApiVO
+     * @return
+     */
+    List<KeywordApiEntity> addApi(AddApiVO addApiVO);
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/2/24 17:05
+     * @Param [removeApiVO]
+     * @return java.lang.Integer
+     **/
+    Integer removeApi(RemoveApiVO removeApiVO);
 }

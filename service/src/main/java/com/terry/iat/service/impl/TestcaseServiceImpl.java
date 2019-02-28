@@ -11,9 +11,7 @@ import com.terry.iat.service.common.exception.BusinessException;
 import com.terry.iat.service.core.HttpResult;
 import com.terry.iat.service.core.KeywordResult;
 import com.terry.iat.service.core.TestcaseResult;
-import com.terry.iat.service.vo.ParameterVO;
-import com.terry.iat.service.vo.TestcaseDebugVO;
-import com.terry.iat.service.vo.TestcaseVO;
+import com.terry.iat.service.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,7 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
     private TestcaseMapper testcaseMapper;
 
     @Autowired
-    private TestcaseKeywordApiService testcaseKeywordsApiService;
+    private TestcaseKeywordService testcaseKeywordService;
 
     @Autowired
     private KeywordService keywordService;
@@ -47,14 +45,17 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
     @Autowired
     private ParameterValueService parameterValueService;
 
+    @Autowired
+    private TestplanTestcaseService testplanTestcaseService;
+
     @Override
     public TestcaseEntity getById(Long id) {
         TestcaseEntity testcaseEntity = testcaseMapper.selectByPrimaryKey(id);
         if (testcaseEntity == null) {
             return new TestcaseEntity();
         }
-        List<TestcaseKeywordApiEntity> testcaseKeywordApiEntityList = testcaseKeywordsApiService.getByTestcaseId(testcaseEntity.getId());
-        testcaseEntity.setKeywords(testcaseKeywordApiEntityList);
+        List<TestcaseKeywordEntity> testcaseKeywordEntityList = testcaseKeywordService.getByTestcaseId(testcaseEntity.getId());
+        testcaseEntity.setKeywords(testcaseKeywordEntityList);
         return testcaseEntity;
     }
 
@@ -77,6 +78,7 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
         if(ids!=null&&!ids.isEmpty()){
             criteria.andNotIn("id",ids);
         }
+        example.orderBy("id").desc();
         return new PageInfo(testcaseMapper.selectByExample(example));
     }
 
@@ -89,7 +91,7 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
         testcaseResult.setTestcaseId(testcaseDebugVO.getTestcaseId());
         Map<String, String> parameter = testcaseDebugVO.getParameters();
         List<KeywordResult> keywordResults = new ArrayList<>();
-        for (TestcaseKeywordApiEntity keyword : testcaseEntity.getKeywords()) {
+        for (TestcaseKeywordEntity keyword : testcaseEntity.getKeywords()) {
             KeywordEntity keywordEntity = keyword.getDetail();
             KeywordResult keywordResult = keywordService.debug(keywordEntity, parameter, envEntity);
             keywordResult.setTestcaseKeywordId(keyword.getId());
@@ -107,14 +109,14 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
 
     @Override
     public Map<String, String> getParameters(Long testcaseId) {
-        List<TestcaseKeywordApiEntity> testcaseKeywordApiEntityList = testcaseKeywordsApiService.getByTestcaseId(testcaseId);
+        List<TestcaseKeywordEntity> testcaseKeywordEntityList = testcaseKeywordService.getByTestcaseId(testcaseId);
         List<Map<String, String>> parameters = new ArrayList<>();
         Map<String, String> parameterTitles = new HashMap<>();
         //TODO 性能问题，需要优化。优化方案：获取参数不再查询数据库
         List<ExtractorEntity> extractors = new ArrayList<>();
-        for (TestcaseKeywordApiEntity testcaseKeywordApiEntity : testcaseKeywordApiEntityList) {
-            extractors = keywordService.getExtractor(testcaseKeywordApiEntity.getKeywordId(), extractors);
-            List<ParameterVO> parameterVOList = keywordService.getParameters(testcaseKeywordApiEntity.getKeywordId(), extractors);
+        for (TestcaseKeywordEntity testcaseKeywordEntity : testcaseKeywordEntityList) {
+            extractors = keywordService.getExtractor(testcaseKeywordEntity.getKeywordId(), extractors);
+            List<ParameterVO> parameterVOList = keywordService.getParameters(testcaseKeywordEntity.getKeywordId(), extractors);
             for (ParameterVO parameterVO : parameterVOList) {
                 if (!parameterTitles.containsKey(parameterVO.getName())) {
                     if (parameterVO.getRule() == null) {
@@ -147,6 +149,9 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
 
     @Override
     public List<TestcaseEntity> getByIds(List<Long> testcaseIds) {
+        if(testcaseIds.isEmpty()){
+            return Collections.EMPTY_LIST;
+        }
         return testcaseMapper.selectByIds(listToString(testcaseIds));
     }
 
@@ -178,6 +183,40 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
 
     @Override
     public int delete(List<Long> ids) {
+        if (ids.isEmpty()) {
+            return 0;
+        }
+        for (Long id : ids) {
+            List<TestplanTestcaseEntity> testplanTestcaseEntityList = testplanTestcaseService.getByTestcaseId(id);
+            if(testplanTestcaseEntityList!=null&&!testplanTestcaseEntityList.isEmpty()){
+                throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("用例被测试计划引用，禁止删除！"));
+            }
+        }
+        for (Long id : ids) {
+            testcaseKeywordService.deleteByTestcaseId(id);
+        }
         return testcaseMapper.deleteByIds(listToString(ids));
     }
+
+    @Override
+    public List<TestcaseKeywordEntity> addKeyword(AddKeywordVO addKeywordVO) {
+        TestcaseEntity testcaseEntity = getById(addKeywordVO.getTestcaseId());
+        if (testcaseEntity == null) {
+            throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("Testcase不存在！"));
+        }
+        List<TestcaseKeywordEntity> testcaseKeywordEntityList = testcaseKeywordService.create(addKeywordVO);
+        return testcaseKeywordEntityList;
+    }
+
+    @Override
+    public Integer removeKeyword(RemoveKeywordVO removeKeywordVO) {
+        TestcaseEntity testcaseEntity = getById(removeKeywordVO.getTestcaseId());
+        if (testcaseEntity == null) {
+            throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("Testcase不存在！"));
+        }
+        int rows = testcaseKeywordService.delete(removeKeywordVO.getIds());
+        return rows;
+    }
+
+
 }

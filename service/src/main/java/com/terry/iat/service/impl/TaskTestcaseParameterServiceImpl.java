@@ -81,6 +81,16 @@ public class TaskTestcaseParameterServiceImpl extends BaseServiceImpl implements
     }
 
     @Override
+    public List<TaskTestcaseParameterEntity> getByTaskIdAndTestcaseId(Long taskId, Long testcaseId) {
+        Example example = new Example(TaskTestcaseParameterEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("taskId",taskId);
+        criteria.andEqualTo("testcaseId",testcaseId);
+        List<TaskTestcaseParameterEntity> taskTestcaseParameterEntityList = taskTestcaseParameterMapper.selectByExample(example);
+        return taskTestcaseParameterEntityList;
+    }
+
+    @Override
     public PageInfo getByTaskIdAndTestcaseId(Integer pn, Integer ps, Long taskId, Long testcaseId) {
         PageHelper.startPage(pn,ps);
         Example example = new Example(TaskTestcaseParameterEntity.class);

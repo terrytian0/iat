@@ -37,6 +37,6 @@ public interface TaskTestcaseKeywordApiService {
      * @Param [pn, ps, taskId, testcaseId, testcaseKeywordId, keywordId]
      * @return com.github.pagehelper.PageInfo
      **/
-    PageInfo getByTaskIdAndTestcaseIdAndKeywordId(Integer pn,Integer ps,Long taskId,Long testcaseId,Long testcaseKeywordId,Long keywordId);
+    PageInfo getByTaskIdAndTestcaseIdAndKeywordId(Integer pn,Integer ps,Long taskId,Long testcaseId,Long parameterId,Long testcaseKeywordId,Long keywordId);
 
 }

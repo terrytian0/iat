@@ -618,6 +618,7 @@
         var apiName = $("#apiName").val();
         var apiPath = $("#apiPath").val();
         var apiMethod = $("#apiMethod").val();
+        var apiDescription = $("#apiDescription").val();
         var apiBody = $("#apiBody").val();
         var apiBodyDefault = $("#apiBody-default").val();
         apiBody = apiBody.replace(/\\/g, "\\\\").replace(/\"/g, "\\\"");
@@ -681,6 +682,7 @@
         data = data + "\"name\":\"" + apiName + "\",";
         data = data + "\"path\":\"" + apiPath + "\",";
         data = data + "\"method\":\"" + apiMethod + "\",";
+        data = data + "\"description\":\"" + apiDescription + "\",";
         if (apiBody != "") {
             data = data + "\"body\":{\"id\":" + apiBodyId + ",\"content\":\"" + apiBody + "\",\"defaultValue\":\"" + apiBodyDefault + "\"},";
         }
@@ -742,7 +744,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "修改Api失败！errormsg=" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }

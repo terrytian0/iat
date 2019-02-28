@@ -86,18 +86,19 @@ public class KeywordController extends BaseController {
      */
     @RequestMapping(value = "/api/add", method = RequestMethod.PUT)
     public Result addApi(@RequestBody AddApiVO addApiVO) {
-        return success(keywordApiService.create(addApiVO));
+        return success(keywordService.addApi(addApiVO));
     }
 
     /**
-     * 从关键字中移除Api
-     *
-     * @param ids
-     * @return
-     */
+     * @Description 从关键字中移除Api
+     * @author terry
+     * @Date 2019/2/24 17:07
+     * @Param [removeApiVO]
+     * @return com.terry.iat.service.common.bean.Result
+     **/
     @RequestMapping(value = "/api/remove", method = RequestMethod.DELETE)
-    public Result removeApi(@RequestBody List<Long> ids) {
-        return success(keywordApiService.delete(ids));
+    public Result removeApi(@RequestBody RemoveApiVO removeApiVO) {
+        return success(keywordService.removeApi(removeApiVO));
     }
 
     /**

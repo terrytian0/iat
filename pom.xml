@@ -24,7 +24,7 @@
         <lombok.version>1.18.2</lombok.version>
         <slf4j-log4j.version>1.8.0-beta1</slf4j-log4j.version>
         <fastjson.version>1.2.51</fastjson.version>
-        <jackson.version>2.9.7</jackson.version>
+        <jackson.version>2.9.8</jackson.version>
         <tk.mybatis.version>4.0.4</tk.mybatis.version>
         <druid.version>1.1.9</druid.version>
         <mybatis.version>3.4.6</mybatis.version>

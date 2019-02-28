@@ -92,6 +92,17 @@ public class KeywordApiServiceImpl extends BaseServiceImpl implements KeywordApi
     }
 
     @Override
+    public List<KeywordApiEntity> getByKeywordIds(List<Long> keywordIds) {
+        if(keywordIds.isEmpty()){
+            return Collections.EMPTY_LIST;
+        }
+        Example example = new Example(KeywordApiEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("keywordId", keywordIds);
+        return keywordApiMapper.selectByExample(example);
+    }
+
+    @Override
     public void updateIdx(KeywordIndexVO keywordIndexVO) {
         List<KeywordApiEntity> keywordApiEntityList = getByKeywordId(keywordIndexVO.getKeywordId());
         KeywordApiEntity keywordApiEntity = keywordApiMapper.selectByPrimaryKey(keywordIndexVO.getKeywordApiId());

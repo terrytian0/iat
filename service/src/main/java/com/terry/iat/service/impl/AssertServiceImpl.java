@@ -10,9 +10,11 @@ import com.terry.iat.service.common.bean.ResultCode;
 import com.terry.iat.service.common.exception.BusinessException;
 import com.terry.iat.service.vo.AssertVO;
 import com.terry.iat.service.vo.ExtractorVO;
+import com.terry.iat.service.vo.ParameterVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,6 +46,20 @@ public class AssertServiceImpl extends BaseServiceImpl implements AssertService 
             return Collections.EMPTY_LIST;
         }
         return assertEntityList;
+    }
+
+    @Override
+    public List<ParameterVO> getParameters(Long keywordApiId) {
+        List<AssertEntity> assertEntityList = getByKeywordApiId(keywordApiId);
+        List<ParameterVO> parameterVOList = new ArrayList<>();
+        for (AssertEntity assertEntity : assertEntityList) {
+            if (assertEntity.getValue().startsWith("#{") && assertEntity.getValue().endsWith("}")) {
+                ParameterVO parameterVO = new ParameterVO();
+                parameterVO.setName(assertEntity.getValue().substring(2, assertEntity.getValue().length() - 1));
+                parameterVOList.add(parameterVO);
+            }
+        }
+        return parameterVOList;
     }
 
     @Override

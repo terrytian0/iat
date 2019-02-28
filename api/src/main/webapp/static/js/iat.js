@@ -3,6 +3,9 @@ function dateFormatter(value, row, index) {
 }
 
 function getDate(str){
+    if(str==undefined){
+        return "-";
+    }
     var oDate = new Date(str),
         oYear = oDate.getFullYear(),
         oMonth = oDate.getMonth()+1,
@@ -91,19 +94,6 @@ function getService(authentication) {
 }
 
 
-
-
-function getDate(str){
-    var oDate = new Date(str),
-        oYear = oDate.getFullYear(),
-        oMonth = oDate.getMonth()+1,
-        oDay = oDate.getDate(),
-        oHour = oDate.getHours(),
-        oMin = oDate.getMinutes(),
-        oSen = oDate.getSeconds(),
-        oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);//最后拼接时间
-    return oTime;
-};
 
 
 //补0操作
@@ -205,12 +195,6 @@ function methodFormatter(value, row, index) {
 
 
 
-function apiUp(obj) {
-    rankApi(obj,"UP");
-}
-function apiDown(obj) {
-    rankApi(obj,"DOWN");
-}
 
 
 function statusFormatter(value, row, index) {

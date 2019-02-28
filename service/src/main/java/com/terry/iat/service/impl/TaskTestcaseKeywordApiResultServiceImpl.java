@@ -2,13 +2,14 @@ package com.terry.iat.service.impl;
 
 import com.terry.iat.dao.entity.TaskTestcaseKeywordApiResultEntity;
 import com.terry.iat.dao.mapper.TaskTestcaseKeywordApiResultMapper;
-import com.terry.iat.service.TaskTestcaseKeywordApiResultService;
 import com.terry.iat.service.TaskService;
+import com.terry.iat.service.TaskTestcaseKeywordApiResultService;
 import com.terry.iat.service.common.base.BaseServiceImpl;
-import com.terry.iat.service.vo.TaskResultVO;
 import com.terry.iat.service.vo.TaskTestcaseKeywordApiResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author terry
@@ -48,16 +49,32 @@ public class TaskTestcaseKeywordApiResultServiceImpl extends BaseServiceImpl imp
         taskTestcaseKeywordApiResultEntity.setMessage(taskTestcaseKeywordApiResultVO.getMessage());
         taskTestcaseKeywordApiResultEntity.setStartTime(taskTestcaseKeywordApiResultVO.getStartTime());
         taskTestcaseKeywordApiResultEntity.setEndTime(taskTestcaseKeywordApiResultVO.getEndTime());
-        int rows =  taskTestcaseKeywordApiResultMapper.insert(taskTestcaseKeywordApiResultEntity);
-        if(rows!=1){
+        int rows = taskTestcaseKeywordApiResultMapper.insert(taskTestcaseKeywordApiResultEntity);
+        if (rows != 1) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
 
     @Override
-    public TaskTestcaseKeywordApiResultEntity get(Long taskId, Long testcaseId, Long parameterId, Long keywordId, Long apiId) {
-        return null;
+    public TaskTestcaseKeywordApiResultEntity get(Long taskId, Long testcaseId, Long parameterId,Long testcaseKeywordId, Long keywordId,Long keywordApiId, Long apiId) {
+        return taskTestcaseKeywordApiResultMapper.get(taskId, testcaseId, parameterId,testcaseKeywordId, keywordId,keywordApiId, apiId);
+    }
+
+    @Override
+    public  Integer checkKeyword(Long taskId, Long testcaseId, Long parameterId,Long testcaseKeeywordId, Long keywordId) {
+        List<TaskTestcaseKeywordApiResultEntity> taskTestcaseKeywordApiResultEntityList = taskTestcaseKeywordApiResultMapper.getByKeyword(taskId, testcaseId, parameterId,testcaseKeeywordId, keywordId);
+        if(taskTestcaseKeywordApiResultEntityList==null||taskTestcaseKeywordApiResultEntityList.isEmpty()){
+            return 0;
+        }
+        Integer res = 1;
+        for (TaskTestcaseKeywordApiResultEntity taskTestcaseKeywordApiResultEntity : taskTestcaseKeywordApiResultEntityList) {
+            if("false".equals(taskTestcaseKeywordApiResultEntity.getStatus())){
+                res=2;
+                break;
+            }
+        }
+        return res;
     }
 }

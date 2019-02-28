@@ -32,9 +32,9 @@ public interface TaskTestcaseKeywordService {
    /**
     * @Description TODO
     * @author terry
-    * @Date 2019/2/20 11:32
-    * @Param [pn, ps, taskId, testcaseId]
+    * @Date 2019/2/25 20:35
+    * @Param [pn, ps, taskId, testcaseId, parameterId]
     * @return com.github.pagehelper.PageInfo
     **/
-    PageInfo getByTaskIdAndTestcaseId(Integer pn,Integer ps,Long taskId,Long testcaseId);
+    PageInfo getByTaskIdAndTestcaseId(Integer pn,Integer ps,Long taskId,Long testcaseId,Long parameterId);
 }

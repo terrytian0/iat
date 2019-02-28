@@ -13,8 +13,8 @@ import javax.persistence.*;
  * @Version 1.0 
  **/
 @Data
-@Table(name="testcase_keyword_api")
-public class TestcaseKeywordApiEntity extends BaseEntity implements Comparable<TestcaseKeywordApiEntity>{
+@Table(name="testcase_keyword")
+public class TestcaseKeywordEntity extends BaseEntity implements Comparable<TestcaseKeywordEntity>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +28,7 @@ public class TestcaseKeywordApiEntity extends BaseEntity implements Comparable<T
     private KeywordEntity detail;
 
     @Override
-    public int compareTo(TestcaseKeywordApiEntity o) {
+    public int compareTo(TestcaseKeywordEntity o) {
         return this.idx-o.getIdx();
     }
 }

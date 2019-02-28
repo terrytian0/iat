@@ -101,7 +101,8 @@
                 {
                     title: '状态',
                     field: 'status',
-                    formatter:testStatusFormatter
+                    formatter:testStatusFormatter,
+                    width: 100
                 }
             ],
             locale: 'zh-CN',
@@ -116,6 +117,16 @@
                 oTableInit.InitTestcaseParameterTable(index, row, $detail);
             }
         });
+    }
+
+    function testStatusFormatter(value, row, index) {
+        if (row.status=="true") {
+            return '<span style="color:#27c24c;">Pass</span>'
+        } else if(row.status=="false"){
+            return '<span style="color:#ed5565;">Fail</span>'
+        }else{
+            return '<span style="color:#23b7e5;">Not Run</span>'
+        }
     }
 
     oTableInit.InitTestcaseParameterTable = function (index, row, $detail) {
@@ -152,7 +163,8 @@
                 }, {
                     title: '状态',
                     field: 'status',
-                    formatter:testStatusFormatter
+                    formatter:testStatusFormatter,
+                    width: 100
                 }
             ],
             locale: 'zh-CN',
@@ -172,13 +184,17 @@
     };
 
     oTableInit.InitTestcaseKeywordTable = function (index, row, $detail) {
+        // console.log(index)
+        // console.log(row)
+        // console.log($detail)
         var cur_table = $detail.html('<table id=\"keywordTable-' + row.id + '\"></table>').find('table');
         var testcaseId = row.testcaseId;
+        var parameterId = row.id;
         $(cur_table).bootstrapTable({
             method: 'get',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            url: "/task/keyword?taskId="+taskId+"&testcaseId="+testcaseId,
+            url: "/task/keyword?taskId="+taskId+"&testcaseId="+testcaseId+"&parameterId="+parameterId,
             height: tableHeight,
             ajaxOptions: {
                 headers: {
@@ -208,7 +224,8 @@
                 }, {
                     title: '状态',
                     field: 'status',
-                    formatter:testStatusFormatter
+                    formatter:testStatusFormatter,
+                    width: 100
                 }
             ],
             locale: 'zh-CN',
@@ -221,13 +238,13 @@
                 aa.css("padding-bottom", "0px");
             },
             onExpandRow: function (index, row, $detail) {
-                oTableInit.InitTestcaseKeywordApiTable(index, row, $detail);
+                oTableInit.InitTestcaseKeywordApiTable(index, row, $detail,parameterId);
             }
         });
         return oTableInit;
     };
 
-    oTableInit.InitTestcaseKeywordApiTable = function (index, row, $detail) {
+    oTableInit.InitTestcaseKeywordApiTable = function (index, row, $detail,parameterId) {
         var cur_table = $detail.html('<table id=\"keywordTable-' + row.id + '\"></table>').find('table');
         var keywordId = row.keywordId;
         var testcaseId = row.testcaseId;
@@ -236,7 +253,7 @@
             method: 'get',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            url: "/task/api?taskId="+taskId+"&testcaseId="+testcaseId+"&keywordId="+keywordId+"&testcaseKeywordId="+testcaseKeywordId,
+            url: "/task/api?taskId="+taskId+"&testcaseId="+testcaseId+"&keywordId="+keywordId+"&testcaseKeywordId="+testcaseKeywordId+"&parameterId="+parameterId,
             height: tableHeight,
             ajaxOptions: {
                 headers: {
@@ -266,7 +283,8 @@
                 }, {
                     title: '状态',
                     field: 'status',
-                    formatter:testStatusFormatter
+                    formatter:testStatusFormatter,
+                    width: 100
                 }
             ],
             locale: 'zh-CN',
@@ -279,7 +297,6 @@
                 aa.css("padding-bottom", "0px");
             },
             onExpandRow: function (index, row, $detail) {
-                // oTableInit.InitTestcaseParameterTable(index, row, $detail);
             }
         });
         return oTableInit;

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
 
-    <title>IAT</title>
+    <title>云测</title>
 
     <meta name="keywords" content="">
     <meta name="description" content="">
@@ -52,18 +52,33 @@
                     <span class="ng-scope"></span>
                 </li>
                 <li>
-                    <a class="J_menuItem" href="static/jsp/iat.jsp">
-                        <i class="fa fa-balance-scale" style="width: 14px"></i>
-                        <span class="nav-label">接口测试</span>
-                    </a>
-
-                </li>
-                <li>
                     <a class="J_menuItem" href="static/jsp/api.jsp">
                         <i class="fa fa-database" style="width: 14px"></i>
-                        <span class="nav-label">Api管理</span>
+                        <span class="nav-label">接口管理</span>
                     </a>
                 </li>
+                <li>
+                    <a class="J_menuItem">
+                        <i class="fa fa-balance-scale" style="width: 14px"></i>
+                        <span class="nav-label">接口测试</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="static/jsp/keyword.jsp">关键字</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="static/jsp/testcase.jsp">测试用例</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="static/jsp/testplan.jsp">测试计划</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="static/jsp/testtask.jsp">测试任务</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="line dk"></li>
                 <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                     <span class="ng-scope"></span>
@@ -76,7 +91,7 @@
                 </li>
                 <li>
                     <a class="J_menuItem" href="static/jsp/client.jsp">
-                        <i class="fa fa-bars" style="width: 14px"></i>
+                        <i class="fa fa-desktop" style="width: 14px"></i>
                         <span class="nav-label">客户端管理</span>
                     </a>
                 </li>
@@ -138,7 +153,7 @@
             </nav>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe id="J_iframe" width="100%" height="100%" frameborder="0" src="/static/jsp/iat.jsp" seamless>
+            <iframe id="J_iframe" width="100%" height="100%" frameborder="0" src="/static/jsp/testtask.jsp" seamless>
             </iframe>
         </div>
     </div>

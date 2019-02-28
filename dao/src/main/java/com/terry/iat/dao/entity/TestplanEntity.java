@@ -27,6 +27,8 @@ public class TestplanEntity extends BaseEntity{
     private String name;
     @Column(name = "strategy")
     private String strategy;
+    @Column(name = "env")
+    private String env;
     @Column(name = "create_user")
     private String createUser;
     @Column(name = "create_time")

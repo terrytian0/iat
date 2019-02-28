@@ -96,7 +96,7 @@ public class HttpDriver {
             result.setResponseHeader(responseHeader);
             String body = response.body().string();
             result.setResponseBody(body);
-            AssertResult assertResult = asserts(httpcode,requestHeader,body,asserts);
+            AssertResult assertResult = asserts(httpcode,requestHeader,body,asserts,parameters);
             if(assertResult.status==false){
                 result.setSuccessful(false);
                 result.setError(assertResult.message);
@@ -140,7 +140,7 @@ public class HttpDriver {
         return map;
     }
 
-    private static AssertResult asserts(Integer httpCode, Map<String, String> header, String body, List<AssertEntity> asserts) {
+    private static AssertResult asserts(Integer httpCode, Map<String, String> header, String body, List<AssertEntity> asserts,Map<String,String> parameters) {
         for (AssertEntity anAssert : asserts) {
             String value = "";
             if (anAssert.getLocale().equals(AssertLocale.HTTPCODE.name())) {
@@ -154,7 +154,12 @@ public class HttpDriver {
                 return AssertResult.builder().status(false).message("比较区域不存在").build();
             }
             anAssert.setActual(value);
-            AssertResult assertResult = compare(anAssert.getMethod(), anAssert.getValue(), value);
+            String expect = anAssert.getValue();
+            if(isParameter(expect)){
+                String pName = getParameterName(expect);
+                expect = parameters.get(pName);
+            }
+            AssertResult assertResult = compare(anAssert.getMethod(), expect, value);
             if(assertResult.status==false){
                 anAssert.setStatus(false);
                 return assertResult;

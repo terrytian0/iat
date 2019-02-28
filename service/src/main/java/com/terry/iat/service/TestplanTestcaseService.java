@@ -2,10 +2,8 @@ package com.terry.iat.service;
 
 
 import com.github.pagehelper.PageInfo;
-import com.terry.iat.dao.entity.TestcaseEntity;
-import com.terry.iat.dao.entity.TestplanEntity;
 import com.terry.iat.dao.entity.TestplanTestcaseEntity;
-import com.terry.iat.service.vo.TestplanAddTestcaseVO;
+import com.terry.iat.service.vo.AddTestcaseVO;
 import com.terry.iat.service.vo.TestplanIndexVO;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public interface TestplanTestcaseService {
      * @Param [testplanAddTestcaseVO]
      * @return com.terry.iat.dao.entity.TestplanEntity
      **/
-    List<TestplanTestcaseEntity> create(TestplanAddTestcaseVO testplanAddTestcaseVO);
+    List<TestplanTestcaseEntity> create(AddTestcaseVO addTestcaseVO);
 
 
      /**
@@ -44,7 +42,14 @@ public interface TestplanTestcaseService {
      * @return java.util.List<com.terry.iat.dao.entity.TestplanTestcaseEntity>
      **/
     List<TestplanTestcaseEntity> getByTestplanId(Long testplanId);
-
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/2/26 12:27
+     * @Param [testcaseId]
+     * @return java.util.List<com.terry.iat.dao.entity.TestplanTestcaseEntity>
+     **/
+    List<TestplanTestcaseEntity> getByTestcaseId(Long testcaseId);
     /**
      * 修改测试用例在测试计划中的排序
      * @param testplanIndexVO

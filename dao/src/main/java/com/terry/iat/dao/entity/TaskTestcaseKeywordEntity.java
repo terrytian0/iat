@@ -35,5 +35,7 @@ public class TaskTestcaseKeywordEntity extends BaseEntity{
     private Integer idx;
 
     @Transient
+    private String status;
+    @Transient
     private List<TaskTestcaseKeywordApiEntity> apis;
 }

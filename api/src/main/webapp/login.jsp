@@ -41,8 +41,8 @@
     </div>
     <div class="signup-footer">
         <div style="text-align: center;float: none">
-           <a class="label label-info" herf="">忘記密碼</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a class="label label-info" herf="">用戶註冊</a>
+            <a class="label label-info" herf="">忘記密碼</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a  class="label label-info" href="register.jsp">用戶註冊</a>
         </div>
     </div>
 </div>
@@ -104,8 +104,8 @@
             success: function (msg) {
                 if (msg.status) {
                     $.cookie("Authentication", msg.content.token);
-                    localStorage.setItem("role",msg.content.role);
-                    localStorage.setItem("name",msg.content.name);
+                    localStorage.setItem("role", msg.content.role);
+                    localStorage.setItem("name", msg.content.name);
                     window.location.href = "index.jsp";
                 } else {
                     clicktag = 0;

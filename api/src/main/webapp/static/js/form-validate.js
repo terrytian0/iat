@@ -48,40 +48,25 @@ $.validator.addMethod("checkDepend",function(value,element,params){
     return this.optional(element)||(checkUrl.test(value));
 },"*依赖jar包错误！，例如:/WEB-INF/lib/xxx-1.0.0.jar");
 
-$.validator.addMethod("checkExcludeClasses",function(value,element,params){
-    var checkUrl = /^\*{2}\/(([0-9a-zA-Z]+|\*{1,2})\/)+(\*{1,2}|[0-9a-zA-Z*]+\.(class|\*){1})$/;
-    if(value.length>512){
-        $(element).data('error-msg','内容长度超过512个字符');
-        return false;
-    }else if(value.length<=0){
-        return true;
-    }
-    var strArry = value.split(",");
-    for(var i = 0;i<strArry.length;i++){
-        if(!checkUrl.test(strArry[i])){
-            $(element).data('error-msg','格式错误，必须以**开头，多个使用逗号分隔，例如:**/com/www/**,**/www/ccc/C.class,**/com/test/**/*,**/com/test/*/c/*,**/ccc/dd/Test*.*,**/ddd/*.class,**/com/**/*.*');
-            return false;
-        }
-    }
-    return true;
-}, function(params, element) {
-    return $(element).data('error-msg');
-});
+$.validator.addMethod("checkJson",function(value,element,params){
+    return this.optional(element)||(checkJson(value));
+},"json格式错误！"),
 
-$.validator.addMethod("checkCron",function(value,element,params){
-    if(value==""||value==null){
-        return true;
+$.validator.addMethod("checkPhone",function(value,element,params){
+    var checkUrl = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+    return this.optional(element)||(checkUrl.test(value));
+},"电话号码格式错误！");
+
+function checkJson(value){
+    try {
+        JSON.parse(value)
+    }catch (e) {
+        return false
     }
-    var result = cronValidate(value);
-    if(result!=true){
-        $(element).data('error-msg',result);
-        return false;
-    }else{
-        return true;
-    }
-},function(params, element) {
-    return $(element).data('error-msg');
-});
+    return true
+}
+
+
 
 
 $().ready(function () {

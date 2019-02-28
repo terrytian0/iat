@@ -171,7 +171,7 @@
     }
 
     function userOptFormatter(value, row, index) {
-        return "   <a class=\"btn btn-danger btn-sm\" id=\"" + row.id + "\" onclick=\"deleteUser(this)\" >删除</a>"
+        return "<a class=\"fa fa-remove\" style=\"width: 14px\"  id=\"" + row.id + "\"  onclick=\"deleteUser(this)\"></a>"
     }
 
     function deleteUser(obj) {

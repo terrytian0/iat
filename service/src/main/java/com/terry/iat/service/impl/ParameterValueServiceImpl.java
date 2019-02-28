@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ParameterValueServiceImpl extends BaseServiceImpl implements ParameterValueService {
@@ -29,6 +26,9 @@ public class ParameterValueServiceImpl extends BaseServiceImpl implements Parame
     @Override
     public List<Map<String, String>> getByTestcaseId(Long testcaseId) {
         Map<Long, String> parameterKey = parameterKeyService.getByTestcaseId(testcaseId);
+        if(parameterKey.isEmpty()){
+            return Collections.EMPTY_LIST;
+        }
         Example example = new Example(ParameterValueEntity.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andIn("keyId", parameterKey.keySet());

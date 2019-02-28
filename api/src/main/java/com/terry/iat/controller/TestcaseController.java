@@ -3,7 +3,7 @@ package com.terry.iat.controller;
 import com.terry.iat.controller.base.BaseController;
 import com.terry.iat.service.common.bean.Result;
 import com.terry.iat.service.ParameterValueService;
-import com.terry.iat.service.TestcaseKeywordApiService;
+import com.terry.iat.service.TestcaseKeywordService;
 import com.terry.iat.service.TestcaseService;
 import com.terry.iat.service.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class TestcaseController extends BaseController {
     private TestcaseService testcaseService;
 
     @Autowired
-    private TestcaseKeywordApiService testcaseKeywordsApiService;
+    private TestcaseKeywordService testcaseKeywordService;
 
     @Autowired
     private ParameterValueService parameterValueService;
@@ -90,17 +90,19 @@ public class TestcaseController extends BaseController {
      */
     @RequestMapping(value = "/keyword/add",method = RequestMethod.PUT)
     public Result addKeywords(@RequestBody AddKeywordVO addKeywordVO){
-        return success(testcaseKeywordsApiService.create(addKeywordVO));
+        return success(testcaseService.addKeyword(addKeywordVO));
     }
 
     /**
-     * 从测试用例中移除Api
-     * @param ids
-     * @return
-     */
+     * @Description TODO
+     * @author terry
+     * @Date 2019/2/24 17:14
+     * @Param [removeKeywordVO]
+     * @return com.terry.iat.service.common.bean.Result
+     **/
     @RequestMapping(value = "/keyword/remove",method = RequestMethod.DELETE)
-    public Result removeKeywords(@RequestBody List<Long> ids){
-        return success(testcaseKeywordsApiService.delete(ids));
+    public Result removeKeywords(@RequestBody RemoveKeywordVO removeKeywordVO){
+        return success(testcaseService.removeKeyword(removeKeywordVO));
     }
 
     /**
@@ -113,10 +115,16 @@ public class TestcaseController extends BaseController {
         return success(testcaseService.debug(testcaseDebugVO));
     }
 
-
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/2/24 17:11
+     * @Param [indexVO]
+     * @return com.terry.iat.service.common.bean.Result
+     **/
     @PutMapping(path = "/idx")
     public Result updateIdx(@RequestBody TestcaseIndexVO indexVO){
-        testcaseKeywordsApiService.updateIdx(indexVO);
+        testcaseKeywordService.updateIdx(indexVO);
         return success();
     }
 
@@ -142,11 +150,24 @@ public class TestcaseController extends BaseController {
     public Result getParameterData(Long testcaseId){
         return success(parameterValueService.getByTestcaseId(testcaseId));
     }
+    /**
+     * @Description TODO
+     * @author terry          
+     * @Date 2019/2/24 17:10
+     * @Param [testcaseAddParameterVOS]
+     * @return com.terry.iat.service.common.bean.Result
+     **/
     @PutMapping(path = "/parameter")
     public Result saveParameter(@RequestBody List<TestcaseAddParameterVO> testcaseAddParameterVOS){
         return success( parameterValueService.createOrUpdate(testcaseAddParameterVOS));
     }
-
+    /**
+     * @Description TODO
+     * @author terry          
+     * @Date 2019/2/24 17:10
+     * @Param [testcaseId, rowNum]
+     * @return com.terry.iat.service.common.bean.Result
+     **/
     @DeleteMapping(path = "/parameter")
     public Result deleteParameter(Long testcaseId,Integer rowNum){
         return success(parameterValueService.delete(testcaseId,rowNum));

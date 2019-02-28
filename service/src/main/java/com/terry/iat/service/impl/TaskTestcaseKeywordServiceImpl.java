@@ -2,15 +2,17 @@ package com.terry.iat.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.terry.iat.dao.entity.*;
+import com.terry.iat.dao.entity.KeywordEntity;
+import com.terry.iat.dao.entity.TaskTestcaseKeywordApiEntity;
+import com.terry.iat.dao.entity.TaskTestcaseKeywordEntity;
+import com.terry.iat.dao.entity.TestcaseKeywordEntity;
 import com.terry.iat.dao.mapper.TaskTestcaseKeywordMapper;
-import com.terry.iat.dao.mapper.TaskTestcaseMapper;
+import com.terry.iat.service.TaskTestcaseKeywordApiResultService;
 import com.terry.iat.service.TaskTestcaseKeywordApiService;
 import com.terry.iat.service.TaskTestcaseKeywordService;
-import com.terry.iat.service.TestcaseKeywordApiService;
+import com.terry.iat.service.TestcaseKeywordService;
 import com.terry.iat.service.common.base.BaseServiceImpl;
 import com.terry.iat.service.common.bean.ResultCode;
-import com.terry.iat.service.common.enums.TaskStatus;
 import com.terry.iat.service.common.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ import java.util.List;
 @Service
 public class TaskTestcaseKeywordServiceImpl extends BaseServiceImpl implements TaskTestcaseKeywordService {
     @Autowired
-    private TestcaseKeywordApiService testcaseKeywordApiService;
+    private TestcaseKeywordService testcaseKeywordService;
 
     @Autowired
     private TaskTestcaseKeywordMapper taskTestcaseKeywordEntity;
@@ -37,32 +39,35 @@ public class TaskTestcaseKeywordServiceImpl extends BaseServiceImpl implements T
     @Autowired
     private TaskTestcaseKeywordApiService taskTestcaseKeywordApiService;
 
+    @Autowired
+    private TaskTestcaseKeywordApiResultService taskTestcaseKeywordApiResultService;
+
     @Override
     public List<TaskTestcaseKeywordEntity> create(Long taskId, Long testplanId, Long testcaseId) {
-        List<TestcaseKeywordApiEntity> testcaseKeywordApiEntityList = testcaseKeywordApiService.getByTestcaseId(testcaseId);
-        if(testcaseKeywordApiEntityList==null||testcaseKeywordApiEntityList.isEmpty()){
+        List<TestcaseKeywordEntity> testcaseKeywordEntityList = testcaseKeywordService.getByTestcaseId(testcaseId);
+        if (testcaseKeywordEntityList == null || testcaseKeywordEntityList.isEmpty()) {
             throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("测试用例中不存在关键字！"));
         }
         List<TaskTestcaseKeywordEntity> taskTestcaseKeywordEntityList = new ArrayList<>();
-        for (TestcaseKeywordApiEntity testcaseKeywordApiEntity : testcaseKeywordApiEntityList) {
-            KeywordEntity keywordEntity = testcaseKeywordApiEntity.getDetail();
+        for (TestcaseKeywordEntity testcaseKeywordEntity : testcaseKeywordEntityList) {
+            KeywordEntity keywordEntity = testcaseKeywordEntity.getDetail();
             TaskTestcaseKeywordEntity taskTestcaseKeywordEntity = new TaskTestcaseKeywordEntity();
             taskTestcaseKeywordEntity.setTestcaseId(testcaseId);
-            taskTestcaseKeywordEntity.setTestcaseKeywordId(testcaseKeywordApiEntity.getId());
+            taskTestcaseKeywordEntity.setTestcaseKeywordId(testcaseKeywordEntity.getId());
             taskTestcaseKeywordEntity.setTaskId(taskId);
-            taskTestcaseKeywordEntity.setTestcaseKeywordId(testcaseKeywordApiEntity.getId());
-            taskTestcaseKeywordEntity.setKeywordId(testcaseKeywordApiEntity.getKeywordId());
-            taskTestcaseKeywordEntity.setIdx(testcaseKeywordApiEntity.getIdx());
+            taskTestcaseKeywordEntity.setTestcaseKeywordId(testcaseKeywordEntity.getId());
+            taskTestcaseKeywordEntity.setKeywordId(testcaseKeywordEntity.getKeywordId());
+            taskTestcaseKeywordEntity.setIdx(testcaseKeywordEntity.getIdx());
             taskTestcaseKeywordEntity.setName(keywordEntity.getName());
             taskTestcaseKeywordEntity.setDescription(keywordEntity.getDescription());
             taskTestcaseKeywordEntityList.add(taskTestcaseKeywordEntity);
         }
         int rows = taskTestcaseKeywordEntity.insertList(taskTestcaseKeywordEntityList);
-        if(rows!=taskTestcaseKeywordEntityList.size()){
+        if (rows != taskTestcaseKeywordEntityList.size()) {
             throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("测试任务中创建keyword失败！"));
         }
         for (TaskTestcaseKeywordEntity testcaseKeywordEntity : taskTestcaseKeywordEntityList) {
-            List<TaskTestcaseKeywordApiEntity> taskTestcaseKeywordApiEntityList = taskTestcaseKeywordApiService.create(taskId,testplanId,testcaseId,testcaseKeywordEntity.getTestcaseKeywordId(),testcaseKeywordEntity.getKeywordId());
+            List<TaskTestcaseKeywordApiEntity> taskTestcaseKeywordApiEntityList = taskTestcaseKeywordApiService.create(taskId, testplanId, testcaseId, testcaseKeywordEntity.getTestcaseKeywordId(), testcaseKeywordEntity.getKeywordId());
             testcaseKeywordEntity.setApis(taskTestcaseKeywordApiEntityList);
         }
         return taskTestcaseKeywordEntityList;
@@ -72,18 +77,26 @@ public class TaskTestcaseKeywordServiceImpl extends BaseServiceImpl implements T
     public List<TaskTestcaseKeywordEntity> getByTaskId(Long taskId) {
         Example example = new Example(TaskTestcaseKeywordEntity.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("taskId",taskId);
+        criteria.andEqualTo("taskId", taskId);
         return taskTestcaseKeywordEntity.selectByExample(example);
     }
 
     @Override
-    public PageInfo getByTaskIdAndTestcaseId(Integer pn,Integer ps,Long taskId, Long testcaseId) {
-        PageHelper.startPage(pn,ps);
+    public PageInfo getByTaskIdAndTestcaseId(Integer pn, Integer ps, Long taskId, Long testcaseId, Long parameterId) {
+        PageHelper.startPage(pn, ps);
         Example example = new Example(TaskTestcaseKeywordEntity.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("taskId",taskId);
-        criteria.andEqualTo("testcaseId",testcaseId);
+        criteria.andEqualTo("taskId", taskId);
+        criteria.andEqualTo("testcaseId", testcaseId);
         List<TaskTestcaseKeywordEntity> taskTestcaseKeywordEntityList = taskTestcaseKeywordEntity.selectByExample(example);
+        for (TaskTestcaseKeywordEntity testcaseKeywordEntity : taskTestcaseKeywordEntityList) {
+            Integer res = taskTestcaseKeywordApiResultService.checkKeyword(taskId, testcaseId, parameterId, testcaseKeywordEntity.getTestcaseKeywordId(), testcaseKeywordEntity.getKeywordId());
+            if (res == 1) {
+                testcaseKeywordEntity.setStatus("true");
+            } else if (res == 2) {
+                testcaseKeywordEntity.setStatus("false");
+            }
+        }
         return new PageInfo(taskTestcaseKeywordEntityList);
     }
 }

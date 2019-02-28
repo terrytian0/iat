@@ -97,5 +97,17 @@ public abstract class BaseServiceImpl {
     }
 
 
+    protected  String join(Collection var0, String var1) {
+        StringBuffer var2 = new StringBuffer();
+        int i = 0;
+        for (Object o : var0) {
+            var2.append(String.valueOf(o));
+            if (i != 0) {
+                var2.append(var1);
+            }
+            i++;
+        }
+        return var2.toString();
+    }
 
 }

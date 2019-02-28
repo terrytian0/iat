@@ -2,8 +2,14 @@ package com.terry.iat.service;
 
 
 import com.github.pagehelper.PageInfo;
+import com.terry.iat.dao.entity.EnvEntity;
 import com.terry.iat.dao.entity.TestplanEntity;
-import com.terry.iat.service.vo.TestplanVO;
+import com.terry.iat.dao.entity.TestplanTestcaseEntity;
+import com.terry.iat.service.vo.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @Description TODO
@@ -52,5 +58,37 @@ public interface TestplanService {
      * @return com.terry.iat.dao.entity.TestplanEntity
      **/
     TestplanEntity getById(Long testplanId);
+    /**
+     * @Description TODO
+     * @author terry          
+     * @Date 2019/2/24 17:23
+     * @Param [addTestcaseVO]
+     * @return java.util.List<com.terry.iat.dao.entity.TestplanTestcaseEntity>
+     **/
+    List<TestplanTestcaseEntity> addTestcase(AddTestcaseVO addTestcaseVO);
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/2/24 17:23
+     * @Param [removeTestcaseVO]
+     * @return java.lang.Integer
+     **/
+    Integer removeTestcase(RemoveTestcaseVO removeTestcaseVO);
 
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/2/25 11:07
+     * @Param [testplanId]
+     * @return java.util.List<com.terry.iat.service.vo.TestplanEnvVO>
+     **/
+    List<TestplanEnvVO>  getEnvById(Long testplanId);
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/2/25 12:06
+     * @Param [envs]
+     * @return void
+     **/
+    void createEnv(List<TestplanCreateEnvVO> envs);
 }

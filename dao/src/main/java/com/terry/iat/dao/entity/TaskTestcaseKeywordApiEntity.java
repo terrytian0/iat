@@ -18,6 +18,8 @@ public class TaskTestcaseKeywordApiEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
+    @Column(name = "service_id")
+    private Long serviceId;
     @Column(name = "task_id")
     private Long taskId;
     @Column(name = "testplan_id")
@@ -52,4 +54,7 @@ public class TaskTestcaseKeywordApiEntity extends BaseEntity{
     private String extractors;
     @Column(name = "asserts")
     private String asserts;
+
+    @Transient
+    private String status;
 }

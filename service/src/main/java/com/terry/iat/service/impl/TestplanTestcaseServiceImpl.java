@@ -2,7 +2,6 @@ package com.terry.iat.service.impl;
 
 import com.github.pagehelper.PageInfo;
 import com.terry.iat.dao.entity.TestcaseEntity;
-import com.terry.iat.dao.entity.TestcaseKeywordApiEntity;
 import com.terry.iat.dao.entity.TestplanEntity;
 import com.terry.iat.dao.entity.TestplanTestcaseEntity;
 import com.terry.iat.dao.mapper.TestplanTestcaseMapper;
@@ -13,7 +12,7 @@ import com.terry.iat.service.common.base.BaseServiceImpl;
 import com.terry.iat.service.common.bean.ResultCode;
 import com.terry.iat.service.common.enums.Index;
 import com.terry.iat.service.common.exception.BusinessException;
-import com.terry.iat.service.vo.TestplanAddTestcaseVO;
+import com.terry.iat.service.vo.AddTestcaseVO;
 import com.terry.iat.service.vo.TestplanIndexVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,21 +39,21 @@ public class TestplanTestcaseServiceImpl extends BaseServiceImpl implements Test
     private TestcaseService testcaseService;
 
     @Override
-    public synchronized List<TestplanTestcaseEntity> create(TestplanAddTestcaseVO testplanAddTestcaseVO) {
-        TestplanEntity testplanEntity = testplanService.getById(testplanAddTestcaseVO.getTestplanId());
+    public synchronized List<TestplanTestcaseEntity> create(AddTestcaseVO addTestcaseVO) {
+        TestplanEntity testplanEntity = testplanService.getById(addTestcaseVO.getTestplanId());
         if (testplanEntity == null) {
             throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("测试计划不存在！"));
         }
-        Integer maxIdx = testplanTestcaseMapper.getMaxIdx(testplanAddTestcaseVO.getTestplanId());
+        Integer maxIdx = testplanTestcaseMapper.getMaxIdx(addTestcaseVO.getTestplanId());
         if (maxIdx == null) {
             maxIdx = 0;
         }
         List<TestplanTestcaseEntity> testplanTestcaseEntityList = new ArrayList<>();
-        for (Long id : testplanAddTestcaseVO.getTestcaseIds()) {
+        for (Long id : addTestcaseVO.getTestcaseIds()) {
             maxIdx = maxIdx + 1;
             TestplanTestcaseEntity testplanTestcaseEntity = new TestplanTestcaseEntity();
             testplanTestcaseEntity.setTestcaseId(id);
-            testplanTestcaseEntity.setTestplanId(testplanAddTestcaseVO.getTestplanId());
+            testplanTestcaseEntity.setTestplanId(addTestcaseVO.getTestplanId());
             testplanTestcaseEntity.setIdx(maxIdx);
             testplanTestcaseEntityList.add(testplanTestcaseEntity);
         }
@@ -85,6 +84,14 @@ public class TestplanTestcaseServiceImpl extends BaseServiceImpl implements Test
         testcaseEntityList.forEach(k -> testcaseEntityHashMap.put(k.getId(), k));
         testplanTestcaseEntityList.forEach(tk -> tk.setDetail(testcaseEntityHashMap.get(tk.getTestcaseId())));
         return testplanTestcaseEntityList;
+    }
+
+    @Override
+    public List<TestplanTestcaseEntity> getByTestcaseId(Long testcaseId) {
+        Example example = new Example(TestplanTestcaseEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("testcaseId", testcaseId);
+        return  testplanTestcaseMapper.selectByExample(example);
     }
 
     @Override

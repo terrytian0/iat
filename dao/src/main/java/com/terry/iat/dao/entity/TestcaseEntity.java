@@ -35,5 +35,5 @@ public class TestcaseEntity extends BaseEntity {
     @Column(name = "update_time")
     private Timestamp updateTime;
     @Transient
-    private List<TestcaseKeywordApiEntity> keywords;
+    private List<TestcaseKeywordEntity> keywords;
 }

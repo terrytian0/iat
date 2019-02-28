@@ -10,9 +10,7 @@ import com.terry.iat.service.common.bean.ResultCode;
 import com.terry.iat.service.common.exception.BusinessException;
 import com.terry.iat.service.core.HttpResult;
 import com.terry.iat.service.core.KeywordResult;
-import com.terry.iat.service.vo.KeywordDebugVO;
-import com.terry.iat.service.vo.KeywordVO;
-import com.terry.iat.service.vo.ParameterVO;
+import com.terry.iat.service.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +20,8 @@ import java.util.*;
 
 
 /**
- * @Description Keyword服务
  * @author terry
+ * @Description Keyword服务
  * @Date 2019/2/14 10:53
  * @Version 1.0
  **/
@@ -49,6 +47,9 @@ public class KeywordServiceImpl extends BaseServiceImpl implements KeywordServic
     @Autowired
     private EnvService envService;
 
+    @Autowired
+    private TestcaseKeywordService testcaseKeywordService;
+
     @Override
     public KeywordEntity getById(Long id) {
         KeywordEntity keywordEntity = keywordMapper.selectByPrimaryKey(id);
@@ -72,11 +73,15 @@ public class KeywordServiceImpl extends BaseServiceImpl implements KeywordServic
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("serviceId", serviceId);
         criteria.andLike("name", key);
+        example.orderBy("id").desc();
         return new PageInfo(keywordMapper.selectByExample(example));
     }
 
     @Override
     public List<KeywordEntity> getByIds(List<Long> ids) {
+        if(ids.isEmpty()){
+            return Collections.EMPTY_LIST;
+        }
         Example example = new Example(KeywordEntity.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andIn("id", ids);
@@ -102,11 +107,13 @@ public class KeywordServiceImpl extends BaseServiceImpl implements KeywordServic
         Map<String, ParameterVO> parameterVOMap = new HashMap<>();
         Map<String, ExtractorEntity> extractorEntityMap = new HashMap<>();
         List<ExtractorEntity> extractorEntityList = new ArrayList<>();
-        if(extractors!=null&&!extractors.isEmpty()){
+        if (extractors != null && !extractors.isEmpty()) {
             extractorEntityList.addAll(extractors);
         }
         for (KeywordApiEntity keywordApiEntity : keywordApiEntityList) {
             List<ParameterVO> parameterVOS = apiService.getParameters(keywordApiEntity.getApiId());
+            List<ParameterVO> assParameter  = assertService.getParameters(keywordApiEntity.getId());
+            parameterVOS.addAll(assParameter);
             for (ExtractorEntity extractorEntity : extractorEntityList) {
                 extractorEntityMap.put(extractorEntity.getName(), extractorEntity);
             }
@@ -161,7 +168,6 @@ public class KeywordServiceImpl extends BaseServiceImpl implements KeywordServic
             HttpResult result = apiService.debug(api.getDetail(), envEntity, parameters, extractorEntityList, assertEntityList);
             result.setKeywordApiId(api.getId());
             result.setApiId(apiEntity.getId());
-//            parameters = result.getParameters();
             httpResults.add(result);
             if (result.isSuccessful() == false) {
                 keywordResult.setStatus(false);
@@ -171,6 +177,26 @@ public class KeywordServiceImpl extends BaseServiceImpl implements KeywordServic
         keywordResult.setHttpResults(httpResults);
 
         return keywordResult;
+    }
+
+    @Override
+    public List<KeywordApiEntity> addApi(AddApiVO addApiVO) {
+        KeywordEntity keywordEntity = getById(addApiVO.getKeywordId());
+        if (keywordEntity == null) {
+            throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("Keyword不存在！"));
+        }
+        List<KeywordApiEntity> keywordApiEntityList = keywordApiService.create(addApiVO);
+        return keywordApiEntityList;
+    }
+
+    @Override
+    public Integer removeApi(RemoveApiVO removeApiVO) {
+        KeywordEntity keywordEntity = getById(removeApiVO.getKeywordId());
+        if (keywordEntity == null) {
+            throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("Keyword不存在！"));
+        }
+        int rows = keywordApiService.delete(removeApiVO.getIds());
+        return rows;
     }
 
 
@@ -206,9 +232,14 @@ public class KeywordServiceImpl extends BaseServiceImpl implements KeywordServic
             return 0;
         }
         for (Long id : ids) {
+            List<TestcaseKeywordEntity> testcaseKeywordEntityList = testcaseKeywordService.getByTestcaseId(id);
+            if(testcaseKeywordEntityList!=null && !testcaseKeywordEntityList.isEmpty()){
+                throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("关键字被用例引用，禁止删除！"));
+            }
+        }
+        for (Long id : ids) {
             keywordApiService.delete(id);
         }
-        //TODO 被测试用例使用的禁止删除
         return keywordMapper.deleteByIds(listToString(ids));
     }
 }

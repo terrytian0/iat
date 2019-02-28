@@ -615,9 +615,13 @@
 
 
     function removeApi(obj) {
-        var data = "[";
-        data = data + obj.id + "";
-        data = data + "]";
+        var data = "{"
+        data = data + "\"keywordId\":"+obj.name;
+        var ids = "[";
+        ids = ids + obj.id + "";
+        ids = ids + "]";
+        data = data + ",\"ids\":"+ids;
+        data = data + "}";
         $.ajax({
             type: "delete",
             url: "/keyword/api/remove",
@@ -667,10 +671,18 @@
         if (row.status == undefined) {
             return;
         }
-        if (row.status=="SUCCEED") {
-            return "<a class=\" btn btn-w-m btn-success\">成功</a>";
+        if (row.status=="FINISHED") {
+            return "<a class=\" btn btn-w-m btn-default\">完成</a>";
         } else if(row.status=="FAILED"){
-            return "<a class=\" btn btn-w-m btn-danger\" id = \"errormsg\">失败</a>";
+            return "<a class=\" btn btn-w-m btn-danger\">失败</a>";
+        }else if(row.status=="RUNNING") {
+            return "<a class=\" btn btn-w-m btn-warning\">运行中</a>";
+        }else if(row.status=="TIMEOUT") {
+            return "<a class=\" btn btn-w-m btn-danger\">超时</a>";
+        }else if(row.status=="INTERRUPT") {
+            return "<a class=\" btn btn-w-m btn-danger\">中断</a>";
+        }else if(row.status=="CREATE") {
+            return "<a class=\" btn btn-w-m btn-info\">运行中</a>";
         }else{
             return value;
         }
@@ -702,9 +714,13 @@
     }
 
     function removeTestcase(obj) {
-        var data = "[";
-        data = data + obj.id;
-        data = data + "]";
+        var data = "{"
+        data = data + "\"testplanId\":"+obj.name;
+        var ids = "[";
+        ids = ids + obj.id + "";
+        ids = ids + "]";
+        data = data + ",\"testcaseIds\":"+ids;
+        data = data + "}";
         $.ajax({
             type: "delete",
             url: "/testplan/testcase/remove",
@@ -733,9 +749,13 @@
     }
 
     function removeKeyword(obj) {
-        var data = "[";
-        data = data + obj.id;
-        data = data + "]";
+        var data = "{"
+        data = data + "\"testcaseId\":"+obj.name;
+        var ids = "[";
+        ids = ids + obj.id + "";
+        ids = ids + "]";
+        data = data + ",\"ids\":"+ids;
+        data = data + "}";
         $.ajax({
             type: "delete",
             url: "/testcase/keyword/remove",

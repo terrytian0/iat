@@ -4,6 +4,8 @@ package com.terry.iat.service;
 import com.terry.iat.dao.entity.TaskTestcaseKeywordApiResultEntity;
 import com.terry.iat.service.vo.TaskTestcaseKeywordApiResultVO;
 
+import java.util.List;
+
 /**
  * @Description TODO
  * @author terry
@@ -23,9 +25,18 @@ public interface TaskTestcaseKeywordApiResultService {
     /**
      * @Description TODO
      * @author terry
-     * @Date 2019/2/22 12:44
-     * @Param [taskId, testcaseId, parameterId, keywordId, apiId]
-     * @return com.terry.iat.dao.entity.TaskResultEntity
+     * @Date 2019/2/25 20:47
+     * @Param [taskId, testcaseId, parameterId, testcaseKeywordId, keywordId, keywordApiId, apiId]
+     * @return com.terry.iat.dao.entity.TaskTestcaseKeywordApiResultEntity
      **/
-    TaskTestcaseKeywordApiResultEntity get(Long taskId, Long testcaseId, Long parameterId, Long keywordId, Long apiId);
+    TaskTestcaseKeywordApiResultEntity get(Long taskId, Long testcaseId, Long parameterId,Long testcaseKeywordId, Long keywordId,Long keywordApiId, Long apiId);
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/2/25 21:14
+     * @Param [taskId, testcaseId, parameterId, testcaseKeeywordId, keywordId]
+     * @return java.util.List<com.terry.iat.dao.entity.TaskTestcaseKeywordApiResultEntity>
+     **/
+    Integer checkKeyword(Long taskId, Long testcaseId, Long parameterId, Long testcaseKeeywordId, Long keywordId);
+
 }

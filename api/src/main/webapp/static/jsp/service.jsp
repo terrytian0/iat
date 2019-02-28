@@ -168,11 +168,11 @@
         });
     }
 
+
+
     function serviceOptFormatter(value, row, index) {
-        return "<a class=\"btn btn-primary btn-sm\" id=\"" + row.id + "\" onclick=\"updateService(this)\">修改</a>"
-            + "   <a class=\"btn btn-danger btn-sm\" id=\"" + row.id + "\" onclick=\"deleteService(this)\">删除</a>"
-
-
+        return "<a class=\"fa fa-edit\" style=\"width: 14px\"  id=\"" + row.id + "\"  onclick=\"updateService(this)\"></a>"
+            + "&nbsp;&nbsp;<a class=\"fa fa-remove\" style=\"width: 14px\"  id=\"" + row.id + "\"  onclick=\"deleteService(this)\"></a>"
     }
 
     function updateService(obj) {

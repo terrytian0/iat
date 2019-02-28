@@ -35,6 +35,14 @@ public interface TaskTestcaseParameterService {
     /**
      * @Description TODO
      * @author terry
+     * @Date 2019/2/25 21:27
+     * @Param [taskId, testcaseId]
+     * @return java.util.List<com.terry.iat.dao.entity.TaskTestcaseParameterEntity>
+     **/
+    List<TaskTestcaseParameterEntity> getByTaskIdAndTestcaseId(Long taskId, Long testcaseId);
+    /**
+     * @Description TODO
+     * @author terry
      * @Date 2019/2/20 11:08
      * @Param [pn, ps, taskId, testcaseId]
      * @return com.github.pagehelper.PageInfo

@@ -13,7 +13,7 @@ import java.util.List;
  * @return 
  **/
 @Data
-public class TestplanAddTestcaseVO {
+public class RemoveTestcaseVO {
     @NotNull
     private List<Long> testcaseIds;
     private Long testplanId;

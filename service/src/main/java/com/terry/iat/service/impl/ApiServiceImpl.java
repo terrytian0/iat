@@ -204,6 +204,9 @@ public class ApiServiceImpl extends BaseServiceImpl implements ApiService {
 
     @Override
     public List<ApiEntity> getByIds(List<Long> ids) {
+        if(ids.isEmpty()){
+            return Collections.EMPTY_LIST;
+        }
         Example example = new Example(ApiEntity.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andIn("id", ids);

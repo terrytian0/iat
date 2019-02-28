@@ -45,6 +45,9 @@ public class TaskTestcaseKeywordApiServiceImpl extends BaseServiceImpl implement
     @Autowired
     private AssertService assertService;
 
+    @Autowired
+    private TaskTestcaseKeywordApiResultService taskTestcaseKeywordApiResultService;
+
     @Override
     public  List<TaskTestcaseKeywordApiEntity> create(Long taskId, Long testplanId, Long testcaseId,Long testcaseKeywordId, Long keywordId) {
         List<KeywordApiEntity> keywordApiEntityList = keywordApiService.getByKeywordId(keywordId);
@@ -55,6 +58,7 @@ public class TaskTestcaseKeywordApiServiceImpl extends BaseServiceImpl implement
         for (KeywordApiEntity keywordApiEntity : keywordApiEntityList) {
             ApiEntity apiEntity = keywordApiEntity.getDetail();
             TaskTestcaseKeywordApiEntity taskTestcaseKeywordApiEntity = new TaskTestcaseKeywordApiEntity();
+            taskTestcaseKeywordApiEntity.setServiceId(apiEntity.getServiceId());
             taskTestcaseKeywordApiEntity.setTaskId(taskId);
             taskTestcaseKeywordApiEntity.setTestplanId(testplanId);
             taskTestcaseKeywordApiEntity.setTestcaseId(testcaseId);
@@ -99,7 +103,7 @@ public class TaskTestcaseKeywordApiServiceImpl extends BaseServiceImpl implement
     }
 
     @Override
-    public PageInfo getByTaskIdAndTestcaseIdAndKeywordId(Integer pn, Integer ps, Long taskId, Long testcaseId,Long testcaseKeywordId, Long keywordId) {
+    public PageInfo getByTaskIdAndTestcaseIdAndKeywordId(Integer pn, Integer ps, Long taskId, Long testcaseId,Long parameterId,Long testcaseKeywordId, Long keywordId) {
         Example example = new Example(TaskTestcaseKeywordApiEntity.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("taskId",taskId);
@@ -108,6 +112,12 @@ public class TaskTestcaseKeywordApiServiceImpl extends BaseServiceImpl implement
         criteria.andEqualTo("keywordId",keywordId);
         PageHelper.startPage(pn,ps);
         List<TaskTestcaseKeywordApiEntity> taskTestcaseKeywordApiEntityList = taskTestcaseKeywordApiMapper.selectByExample(example);
+        for (TaskTestcaseKeywordApiEntity taskTestcaseKeywordApiEntity : taskTestcaseKeywordApiEntityList) {
+            TaskTestcaseKeywordApiResultEntity taskTestcaseKeywordApiResultEntity = taskTestcaseKeywordApiResultService.get(taskId,testcaseId,parameterId,testcaseKeywordId,keywordId,taskTestcaseKeywordApiEntity.getKeywordApiId(),taskTestcaseKeywordApiEntity.getApiId());
+            if(taskTestcaseKeywordApiResultEntity!=null){
+                taskTestcaseKeywordApiEntity.setStatus(taskTestcaseKeywordApiResultEntity.getStatus());
+            }
+        }
         return new PageInfo(taskTestcaseKeywordApiEntityList);
     }
 }

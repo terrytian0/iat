@@ -95,8 +95,8 @@ public class TaskController extends BaseController {
      * @Param [pageNumber, pageSize, taskId, testcaseId]
      **/
     @GetMapping("/keyword")
-    public Result getKeyword(Integer pageNumber, Integer pageSize, Long taskId, Long testcaseId) {
-        return success(taskTestcaseKeywordService.getByTaskIdAndTestcaseId(pageNumber, pageSize, taskId, testcaseId));
+    public Result getKeyword(Integer pageNumber, Integer pageSize, Long taskId, Long testcaseId,Long parameterId) {
+        return success(taskTestcaseKeywordService.getByTaskIdAndTestcaseId(pageNumber, pageSize, taskId, testcaseId,parameterId));
     }
 
     /**
@@ -107,8 +107,8 @@ public class TaskController extends BaseController {
      * @Param [pageNumber, pageSize, taskId, testcaseId, keywordId]
      **/
     @GetMapping("/api")
-    public Result getApis(Integer pageNumber, Integer pageSize, Long taskId, Long testcaseId, Long testcaseKeywordId, Long keywordId) {
-        return success(taskTestcaseKeywordApiService.getByTaskIdAndTestcaseIdAndKeywordId(pageNumber, pageSize, taskId, testcaseId, testcaseKeywordId, keywordId));
+    public Result getApis(Integer pageNumber, Integer pageSize, Long taskId, Long testcaseId,Long parameterId, Long testcaseKeywordId, Long keywordId) {
+        return success(taskTestcaseKeywordApiService.getByTaskIdAndTestcaseIdAndKeywordId(pageNumber, pageSize, taskId, testcaseId,parameterId, testcaseKeywordId, keywordId));
     }
 
     /**

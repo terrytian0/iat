@@ -20,12 +20,12 @@
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
-    <form role="form" class="form-horizontal m-t well-g" id="jacocoForm">
+    <form role="form" class="form-horizontal m-t well-g" id="">
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>修改测试计划</h5>
+                        <h5>基础信息</h5>
                         <div class="ibox-tools" style="margin-top: -9px;">
                             <a class="btn btn-primary btn-sm" onclick="updateTestplan()">保存</a>
                         </div>
@@ -49,6 +49,20 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>环境配置</h5>
+                        <div class="ibox-tools" style="margin-top: -9px;">
+                            <a class="btn btn-primary btn-sm" onclick="saveEnv()">保存</a>
+                        </div>
+                    </div>
+                    <div class="ibox-content" id="envList">
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 
@@ -68,17 +82,125 @@
 <script src="/static/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
 <script src="/static/js/plugins/jquery-ui-1.12.1/jquery-ui.js"></script>
 <script>
+
+    function saveEnv() {
+        var selects = $("#envList").find("select");
+        var data = "["
+        for (var i = 0; i < selects.length; i++) {
+            if(i>0){
+                data = data + ","
+            }
+            data = data + "{"
+            data = data + "\"testplanId\":"+testplanId+",";
+            var select = selects[i];
+            var serviceId = select.id;
+            data = data + "\"serviceId\":"+serviceId+",";
+            var index = select.selectedIndex;
+            var envValue = select.options[index].value
+            if (envValue == "") {
+                swal({
+                    title: "提示！",
+                    text: "请选择测试环境！",
+                    type: "error"
+                });
+                return
+            }
+            data = data + "\"selectId\":"+envValue+"";
+            data = data + "}"
+        }
+        data = data + "]"
+        $.ajax({
+            type: "put",
+            dataType: "json",
+            url: "/testplan/env",
+            data:data,
+            async: false,
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (request) {
+                request.setRequestHeader("Authentication", $.cookie("Authentication"));
+            },
+            success: function (msg) {
+                if (msg.status) {
+                    swal({
+                        title: "提示！",
+                        text: "测试环境保存成功！",
+                        type: "info"
+                    });
+                } else if (msg.code == "D0000104") {
+                    window.location.href = "/login.jsp";
+                } else {
+                    swal({
+                        title: "提示！",
+                        text: msg.message,
+                        type: "error"
+                    });
+                }
+            }
+        });
+    }
+
+    function env() {
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            url: "/testplan/env?testplanId=" + testplanId,
+            async: false,
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (request) {
+                request.setRequestHeader("Authentication", $.cookie("Authentication"));
+            },
+            success: function (msg) {
+                if (msg.status) {
+                    var envList = "";
+                    var res = msg.content;
+                    for (var i = 0; i < res.length; i++) {
+                        var serviceName = res[i].serviceName
+                        var serviceId = res[i].serviceId
+                        envList = envList + "<div class=\"form-group draggable\"><label class=\"col-sm-1 control-label\">" + serviceName + "：</label><div class=\"col-sm-8\"><select class=\"form-control m-b\" style=\"height: 30px\" id=\"" + serviceId + "\">";
+                        var envs = res[i].envs;
+                        envList = envList + "<option value=\"\">请选择环境</option>";
+                        for (var j = 0; j < envs.length; j++) {
+                            var env = envs[j];
+                            var name = env.env + "(" + env.host + ":" + env.port + ")";
+                            var id = env.id;
+                            envList = envList + "<option key=\"env-" + id + "\" value=\"" + id + "\">" + name + "</option>";
+                        }
+                        envList = envList + "</select></div></div>";
+                    }
+                    $("#envList").html(envList)
+                    for (var i = 0; i < res.length; i++) {
+                        var serviceId = res[i].serviceId;
+                        var env = res[i].env
+                        if (env != undefined) {
+                            var envId = env.id;
+                            $("select[id='" + serviceId + "']").find("option[key='env-" + envId + "']").attr("selected", true);
+                        }
+                    }
+                } else if (msg.code == "D0000104") {
+                    window.location.href = "/login.jsp";
+                } else {
+                    swal({
+                        title: "提示！",
+                        text: msg.message,
+                        type: "error"
+                    });
+                }
+            }
+        });
+    }
+
     var testplanId;
     window.onload = function () {
         testplanId = window.location.href.getQuery("testplanId");
         getTestplan();
+        env();
     }
-    
+
     function getTestplan() {
         $.ajax({
             type: "get",
             dataType: "json",
-            url: "/testplan/info?testplanId="+testplanId,
+            url: "/testplan/info?testplanId=" + testplanId,
             async: false,
             contentType: "application/json; charset=utf-8",
             beforeSend: function (request) {
@@ -100,6 +222,7 @@
             }
         });
     }
+
     function updateTestplan() {
         var testplanName = $("#testplanName").val();
         var strategy = $("#strategy").val();

@@ -41,6 +41,14 @@ public interface KeywordApiService {
      * @return
      */
     List<KeywordApiEntity> getByKeywordId(Long keywordId);
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/2/24 21:29
+     * @Param [keywordIds]
+     * @return java.util.List<com.terry.iat.dao.entity.KeywordApiEntity>
+     **/
+    List<KeywordApiEntity> getByKeywordIds(List<Long> keywordIds);
 
     /**
      * 修改Keyword排序

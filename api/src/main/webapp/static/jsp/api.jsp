@@ -33,8 +33,11 @@
 </div>
 <div id="toolbar" class="btn-group">
     <div>
-        <select class="form-control m-b" id="apiService" style="height: 30px" onchange="refreshApiTable()">
+        <select class="btn btn-default" id="apiService" style="height: 30px" onchange="refreshApiTable()">
         </select>
+        <button id="createApi" type="button" class="btn btn-primary" onclick="createApi();" style="margin-left:5px">
+            创建
+        </button>
     </div>
 </div>
 
@@ -68,9 +71,9 @@
         var serviceId = localStorage.getItem("serviceId")
         if (serviceId != undefined) {
             $("#apiService").find("option[key='" + serviceId + "']").attr("selected", true);
-        }else{
+        } else {
             serviceId = $("#apiService option:selected").attr("key");
-            localStorage.setItem("serviceId",serviceId);
+            localStorage.setItem("serviceId", serviceId);
         }
         initApiTable();
     };
@@ -84,6 +87,10 @@
             url: "/api/search?serviceId=" + serviceId,
         });
     };
+
+    function createApi() {
+        window.location.href = "/static/jsp/api-create.jsp";
+    }
 
     function initApiTable() {
         var serviceId = $("#apiService option:selected").attr("key");
@@ -128,7 +135,7 @@
                 {
                     title: '方法',
                     field: 'method',
-                    formatter:methodFormatter
+                    formatter: methodFormatter
                 }, {
                     title: '路径',
                     field: 'path'
@@ -177,18 +184,18 @@
     }
 
     function apiOptFormatter(value, row, index) {
-        return "<a class=\"btn btn-primary btn-sm\" id=\"" + row.id + "\" onclick=\"updateApi(this)\" >详情</a>"
-            + "   <a class=\"btn btn-danger btn-sm\" id=\"" + row.id + "\" onclick=\"deleteApi(this)\" >删除</a>"
+        return "<a class=\"fa fa-edit\" style=\"width: 14px\"  id=\"" + row.id + "\"  onclick=\"updateApi(this)\"></a>"
+            + "&nbsp;&nbsp;<a class=\"fa fa-remove\" style=\"width: 14px\"  id=\"" + row.id + "\"  onclick=\"deleteApi(this)\"></a>"
     }
 
     function updateApi(obj) {
         window.location.href = "/static/jsp/api-detail.jsp?apiId=" + obj.id;
     }
+
     function deleteApi(obj) {
         $.ajax({
             type: "delete",
-            url: "/api/delete?apiId"+obj.id,
-            data: data,
+            url: "/api/delete?apiId=" + obj.id,
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             beforeSend: function (request) {

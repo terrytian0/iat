@@ -13,7 +13,7 @@ public class UserVO extends BaseVO {
     @Email
     @Size(min = 5,max = 64)
     private String name;
-    @Pattern(regexp = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\\\d{8}$")
+    @Pattern(regexp = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$")
     private String phone;
     @Size(min = 6,max = 20)
     private String password;

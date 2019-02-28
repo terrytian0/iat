@@ -3,9 +3,9 @@ package com.terry.iat.service;
 
 import com.github.pagehelper.PageInfo;
 import com.terry.iat.dao.entity.TestcaseEntity;
-import com.terry.iat.service.vo.TestcaseDebugVO;
+import com.terry.iat.dao.entity.TestcaseKeywordEntity;
+import com.terry.iat.service.vo.*;
 import com.terry.iat.service.core.TestcaseResult;
-import com.terry.iat.service.vo.TestcaseVO;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +37,23 @@ public interface TestcaseService {
      * @return
      */
     int delete(List<Long> ids);
+    /**
+     * @Description TODO
+     * @author terry          
+     * @Date 2019/2/24 17:12
+     * @Param [addKeywordVO]
+     * @return java.util.List<com.terry.iat.dao.entity.TestcaseKeywordEntity>
+     **/
+    List<TestcaseKeywordEntity> addKeyword(AddKeywordVO addKeywordVO);
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/2/24 17:12
+     * @Param [removeKeywordVO]
+     * @return java.lang.Integer
+     **/
+    Integer removeKeyword(RemoveKeywordVO removeKeywordVO);
+
 
     /**
      * 获取testcase详情

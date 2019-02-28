@@ -4,6 +4,7 @@ import com.terry.iat.dao.entity.AssertEntity;
 import com.terry.iat.dao.entity.ExtractorEntity;
 import com.terry.iat.service.vo.AssertVO;
 import com.terry.iat.service.vo.ExtractorVO;
+import com.terry.iat.service.vo.ParameterVO;
 
 import java.util.List;
 
@@ -22,6 +23,14 @@ public interface AssertService {
      * @return
      */
     List<AssertEntity> getByKeywordApiId(Long keywordApiId);
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/2/26 13:55
+     * @Param [keywordApiId]
+     * @return java.util.List<com.terry.iat.service.vo.ParameterVO>
+     **/
+    List<ParameterVO> getParameters(Long keywordApiId);
 
     /**
      * 删除断言
