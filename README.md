@@ -56,7 +56,7 @@ public class SwaggerListener implements ApplicationListener<ContextRefreshedEven
 ### Spring boot
 
 ## 手动添加
-
+![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/api-list.jpg)
 
 ## 调试
 + 参数化
