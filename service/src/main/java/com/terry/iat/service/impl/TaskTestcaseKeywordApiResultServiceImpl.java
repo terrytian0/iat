@@ -38,6 +38,8 @@ public class TaskTestcaseKeywordApiResultServiceImpl extends BaseServiceImpl imp
         taskTestcaseKeywordApiResultEntity.setKeywordId(taskTestcaseKeywordApiResultVO.getKeywordId());
         taskTestcaseKeywordApiResultEntity.setKeywordApiId(taskTestcaseKeywordApiResultVO.getKeywordApiId());
         taskTestcaseKeywordApiResultEntity.setApiId(taskTestcaseKeywordApiResultVO.getApiId());
+        taskTestcaseKeywordApiResultEntity.setUrl(taskTestcaseKeywordApiResultVO.getUrl());
+        taskTestcaseKeywordApiResultEntity.setMethod(taskTestcaseKeywordApiResultVO.getMethod());
         taskTestcaseKeywordApiResultEntity.setRequestHeaders(taskTestcaseKeywordApiResultVO.getRequestHeaders());
         taskTestcaseKeywordApiResultEntity.setRequestFormdatas(taskTestcaseKeywordApiResultVO.getRequestFormdatas());
         taskTestcaseKeywordApiResultEntity.setRequestBody(taskTestcaseKeywordApiResultVO.getRequestBody());

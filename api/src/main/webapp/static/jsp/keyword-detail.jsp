@@ -675,7 +675,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "获取Api参数失败！" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }
@@ -707,7 +707,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "获取Api参数失败！" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }
@@ -818,7 +818,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "修改Api失败！errormsg=" + msg.errorMsg,
+                        text:msg.message,
                         type: "error"
                     });
                 }
@@ -848,7 +848,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }

@@ -47,6 +47,9 @@ public class ApiServiceImpl extends BaseServiceImpl implements ApiService {
     @Autowired
     private EnvService envService;
 
+    @Autowired
+    private KeywordApiService keywordApiService;
+
 
     @Override
     public ApiEntity create(ApiVO apiVO) {
@@ -137,33 +140,20 @@ public class ApiServiceImpl extends BaseServiceImpl implements ApiService {
         apiEntity.setUpdateTime(getTimestamp());
         apiEntity.setUpdateUser(getCurrentUser().getName());
         apiMapper.updateByPrimaryKey(apiEntity);
-        headerService.update(apiVO.getHeaders());
-        formDataService.update(apiVO.getFormDatas());
-        bodyService.update(apiVO.getBody());
+        List<HeaderEntity> headerEntityList = headerService.update(apiVO.getHeaders());
+        List<FormDataEntity> formDataEntityList = formDataService.update(apiVO.getFormDatas());
+        BodyEntity bodyEntity = bodyService.update(apiVO.getBody());
+        apiEntity.setHeader(headerEntityList);
+        apiEntity.setFormData(formDataEntityList);
+        apiEntity.setBody(bodyEntity);
         return apiEntity;
     }
 
     @Override
     public int delete(Long id) {
         ApiEntity apiEntity = getById(id);
-        if (apiEntity.getBody() != null) {
-            bodyService.delete(apiEntity.getBody().getId());
-        }
-        if (apiEntity.getHeader() != null) {
-            List<Long> ids = new ArrayList<>();
-            for (HeaderEntity headerEntity : apiEntity.getHeader()) {
-                ids.add(headerEntity.getId());
-            }
-            headerService.delete(ids);
-        }
-        if (apiEntity.getFormData() != null) {
-            List<Long> ids = new ArrayList<>();
-            for (FormDataEntity formDatum : apiEntity.getFormData()) {
-                ids.add(formDatum.getId());
-            }
-            formDataService.delete(ids);
-        }
-        return apiMapper.deleteByPrimaryKey(id);
+        apiEntity.setDeleted(1);
+        return apiMapper.updateByPrimaryKey(apiEntity);
     }
 
     @Override

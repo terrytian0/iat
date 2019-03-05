@@ -180,15 +180,15 @@ function methodFormatter(value, row, index) {
     value = value.toUpperCase();
     switch (value) {
         case "POST":
-            return "<a class=\"btn btn-success btn-w-m\" >"+value+"</a>";
+            return "<font color='#23ad44'> "+value+"</font>";
         case "PUT":
-            return "<a class=\"btn btn-warning btn-w-m\" >"+value+"</a>";
+            return "<font color='#f8ac59'> "+value+"</font>";
         case "DELETE":
-            return "<a class=\"btn btn-danger  btn-w-m\" >"+value+"</a>";
+            return "<font color='#ed5565'> "+value+"</font>";
         case "GET":
-            return "<a class=\"btn btn-info  btn-w-m\" >"+value+"</a>";
+            return "<font color='#23c6c8'> "+value+"</font>";
         default:
-            return "<a class=\"btn btn-info  btn-w-m\" >"+value+"</a>";
+            return "<font color='#262626'> "+value+"</font>";
     }
 }
 
@@ -253,7 +253,7 @@ function getExtractor(keywordApiId) {
             } else {
                 swal({
                     title: "提示！",
-                    text: "获取Api参数失败！" + msg.errorMsg,
+                    text: msg.message,
                     type: "error"
                 });
             }
@@ -286,7 +286,7 @@ function getAssert(keywordApiId) {
             } else {
                 swal({
                     title: "提示！",
-                    text: "获取Api参数失败！" + msg.errorMsg,
+                    text: msg.message,
                     type: "error"
                 });
             }

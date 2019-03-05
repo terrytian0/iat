@@ -102,6 +102,7 @@ public class KeywordApiServiceImpl extends BaseServiceImpl implements KeywordApi
         return keywordApiMapper.selectByExample(example);
     }
 
+
     @Override
     public void updateIdx(KeywordIndexVO keywordIndexVO) {
         List<KeywordApiEntity> keywordApiEntityList = getByKeywordId(keywordIndexVO.getKeywordId());

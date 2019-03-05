@@ -120,4 +120,21 @@ public class TaskTestcaseKeywordApiServiceImpl extends BaseServiceImpl implement
         }
         return new PageInfo(taskTestcaseKeywordApiEntityList);
     }
+
+    @Override
+    public TaskTestcaseKeywordApiEntity get(Long taskId,  Long testcaseId, Long testcaseKeywordId, Long keywordId, Long keywordApiId, Long apiId) {
+        Example example = new Example(TaskTestcaseKeywordApiEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("taskId",taskId);
+        criteria.andEqualTo("testcaseId",testcaseId);
+        criteria.andEqualTo("testcaseKeywordId",testcaseKeywordId);
+        criteria.andEqualTo("keywordId",keywordId);
+        criteria.andEqualTo("keywordApiId",keywordApiId);
+        criteria.andEqualTo("apiId",apiId);
+        List<TaskTestcaseKeywordApiEntity> taskTestcaseKeywordApiEntityList = taskTestcaseKeywordApiMapper.selectByExample(example);
+        if(taskTestcaseKeywordApiEntityList==null||taskTestcaseKeywordApiEntityList.isEmpty()){
+            throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("测试任务中Api不存在！"));
+        }
+        return taskTestcaseKeywordApiEntityList.get(0);
+    }
 }

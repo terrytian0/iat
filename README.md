@@ -5,8 +5,9 @@
 
 ## docker
 
-# 同步Swagger
-## Spring MVC
+# 接口管理
+## 自动同步
+### Spring MVC
 + pom文件中添加依赖
 ```
 <dependency>
@@ -52,13 +53,14 @@ public class SwaggerListener implements ApplicationListener<ContextRefreshedEven
 
 ```
 
-## Spring boot
+### Spring boot
 
-# Api管理
+## 手动添加
 
-# Api调试
 
-# Api测试
+## 调试
++ 参数化
+
 
 ## 关键字
 

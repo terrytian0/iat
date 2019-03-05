@@ -9,6 +9,7 @@ import com.terry.iat.service.common.base.BaseServiceImpl;
 import com.terry.iat.service.common.bean.ResultCode;
 import com.terry.iat.service.common.enums.TaskStatus;
 import com.terry.iat.service.common.exception.BusinessException;
+import com.terry.iat.service.vo.NodeVO;
 import com.terry.iat.service.vo.TaskResultVO;
 import com.terry.iat.service.vo.TestplanEnvVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,6 +149,95 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
         }
         taskEntity.setTestcases(taskTestcaseEntityList);
         return taskEntity;
+    }
+
+    public void setStatus(NodeVO node, String status) {
+        if ("true".equals(status)) {
+            node.setStatus(status);
+            node.setTags(Arrays.asList("<font color=\"#23ad44\">Pass</font>"));
+        } else if ("false".equals(status)) {
+            node.setStatus(status);
+            node.setTags(Arrays.asList("<font color=\"#f05050\">Fail</font>"));
+        } else {
+            node.setStatus(status);
+            node.setTags(Arrays.asList("Not Run"));
+        }
+    }
+
+    @Override
+    public List<NodeVO> detail(Long taskId) {
+        TaskEntity taskEntity = getById(taskId);
+        List<NodeVO> taskTree = new ArrayList<>();
+        List<TaskTestcaseEntity> taskTestcaseEntityList = taskTestcaseService.getByTaskId(taskId);
+        for (TaskTestcaseEntity taskTestcaseEntity : taskTestcaseEntityList) {
+            NodeVO testcase = new NodeVO();
+            testcase.setLevel(1);
+            testcase.setId(taskTestcaseEntity.getTestcaseId());
+            testcase.setText(taskTestcaseEntity.getName());
+            testcase.setParentid(0L);
+            testcase.setTaskId(taskId);
+            testcase.setTestcaseId(taskTestcaseEntity.getTestcaseId());
+            setStatus(testcase, taskTestcaseEntity.getStatus());
+            List<NodeVO> testcaseTree = new ArrayList<>();
+            PageInfo parameter = taskTestcaseParameterService.getByTaskIdAndTestcaseId(1, 10000, taskId, taskTestcaseEntity.getTestcaseId());
+            List<TaskTestcaseParameterEntity> taskTestcaseParameterEntityList = parameter.getList();
+            int pindx = 0;
+            for (TaskTestcaseParameterEntity taskTestcaseParameterEntity : taskTestcaseParameterEntityList) {
+                pindx++;
+                NodeVO p = new NodeVO();
+                p.setLevel(2);
+                p.setId(taskTestcaseParameterEntity.getId());
+//                p.setText(taskTestcaseParameterEntity.getParameters());
+                p.setText("第 " + pindx + " 个参数");
+                p.setParentid(taskTestcaseParameterEntity.getTestcaseId());
+                p.setTaskId(taskId);
+                p.setTestcaseId(taskTestcaseEntity.getTestcaseId());
+                p.setParameterId(taskTestcaseParameterEntity.getId());
+                setStatus(p, taskTestcaseParameterEntity.getStatus());
+                List<NodeVO> parameterTree = new ArrayList<>();
+                PageInfo keyword = taskTestcaseKeywordService.getByTaskIdAndTestcaseId(1, 1000, taskId, taskTestcaseParameterEntity.getTestcaseId(), taskTestcaseParameterEntity.getId());
+                List<TaskTestcaseKeywordEntity> taskTestcaseKeywordEntityList = keyword.getList();
+                for (TaskTestcaseKeywordEntity taskTestcaseKeywordEntity : taskTestcaseKeywordEntityList) {
+                    NodeVO k = new NodeVO();
+                    k.setLevel(3);
+                    k.setId(taskTestcaseKeywordEntity.getTestcaseKeywordId());
+                    k.setText(taskTestcaseKeywordEntity.getName());
+                    k.setParentid(taskTestcaseParameterEntity.getId());
+                    k.setTaskId(taskId);
+                    k.setTestcaseId(taskTestcaseEntity.getTestcaseId());
+                    k.setParameterId(taskTestcaseParameterEntity.getId());
+                    k.setTestcaseKeywordId(taskTestcaseKeywordEntity.getTestcaseKeywordId());
+                    k.setKeywordId(taskTestcaseKeywordEntity.getKeywordId());
+                    setStatus(k, taskTestcaseKeywordEntity.getStatus());
+                    List<NodeVO> keywordTree = new ArrayList<>();
+                    PageInfo api = taskTestcaseKeywordApiService.getByTaskIdAndTestcaseIdAndKeywordId(1, 10000, taskId, taskTestcaseKeywordEntity.getTestcaseId(), taskTestcaseParameterEntity.getId(), taskTestcaseKeywordEntity.getTestcaseKeywordId(), taskTestcaseKeywordEntity.getKeywordId());
+                    List<TaskTestcaseKeywordApiEntity> taskTestcaseKeywordApiEntityList = api.getList();
+                    for (TaskTestcaseKeywordApiEntity taskTestcaseKeywordApiEntity : taskTestcaseKeywordApiEntityList) {
+                        NodeVO a = new NodeVO();
+                        a.setLevel(4);
+                        a.setId(taskTestcaseKeywordApiEntity.getKeywordApiId());
+                        a.setText(taskTestcaseKeywordApiEntity.getPath());
+                        a.setParentid(taskTestcaseKeywordEntity.getTestcaseKeywordId());
+                        a.setTaskId(taskId);
+                        a.setTestcaseId(taskTestcaseEntity.getTestcaseId());
+                        a.setParameterId(taskTestcaseParameterEntity.getId());
+                        a.setTestcaseKeywordId(taskTestcaseKeywordEntity.getTestcaseKeywordId());
+                        a.setKeywordId(taskTestcaseKeywordEntity.getKeywordId());
+                        a.setKeywordApiId(taskTestcaseKeywordApiEntity.getKeywordApiId());
+                        a.setApiId(taskTestcaseKeywordApiEntity.getApiId());
+                        setStatus(a, taskTestcaseKeywordApiEntity.getStatus());
+                        keywordTree.add(a);
+                    }
+                    k.setNodes(keywordTree);
+                    parameterTree.add(k);
+                }
+                p.setNodes(parameterTree);
+                testcaseTree.add(p);
+            }
+            testcase.setNodes(testcaseTree);
+            taskTree.add(testcase);
+        }
+        return taskTree;
     }
 
     @Override

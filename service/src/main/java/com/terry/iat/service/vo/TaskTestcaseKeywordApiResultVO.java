@@ -30,6 +30,8 @@ public class TaskTestcaseKeywordApiResultVO {
     private Long keywordApiId;
     @NotEmpty
     private Long apiId;
+    private String url;
+    private String method;
     private String requestHeaders;
     private String requestFormdatas;
     private String requestBody;

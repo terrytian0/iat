@@ -131,14 +131,15 @@
                     title: 'ID',
                     field: 'id',
                     visible: false
+                }, {
+                    title: '路径',
+                    field: 'path'
                 },
                 {
                     title: '方法',
                     field: 'method',
+                    align: 'center',
                     formatter: methodFormatter
-                }, {
-                    title: '路径',
-                    field: 'path'
                 },
 
                 {

@@ -177,7 +177,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "获取服务失败。\n" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.terry.iat.dao.entity.TaskEntity;
 import com.terry.iat.dao.entity.TaskTestcaseEntity;
 import com.terry.iat.dao.entity.TaskTestcaseParameterEntity;
+import com.terry.iat.service.vo.NodeVO;
 import com.terry.iat.service.vo.TaskResultVO;
 import com.terry.iat.service.vo.TestplanVO;
 import javafx.concurrent.Task;
@@ -44,6 +45,15 @@ public interface TaskService {
      * @return com.terry.iat.dao.entity.TaskEntity
      **/
     TaskEntity get(String client,String key);
+    
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/3 19:28
+     * @Param [taskId]
+     * @return java.util.List<com.terry.iat.service.vo.NodeVO>
+     **/
+    List<NodeVO> detail(Long taskId);
     /**
      * @Description TODO
      * @author terry

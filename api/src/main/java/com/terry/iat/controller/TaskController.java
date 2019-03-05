@@ -70,8 +70,8 @@ public class TaskController extends BaseController {
      * @Date 2019/2/20 9:56
      * @Param [taskId]
      **/
-    @GetMapping("/testcase")
-    public Result getTestcase(Long taskId) {
+    @GetMapping("/testcases")
+    public Result getTestcases(Long taskId) {
         return success(taskTestcaseService.getByTaskId(taskId));
     }
 
@@ -82,9 +82,20 @@ public class TaskController extends BaseController {
      * @Date 2019/2/20 11:31
      * @Param [pageNumber, pageSize, taskId, testcaseId]
      **/
-    @GetMapping("/parameter")
-    public Result getParameter(Integer pageNumber, Integer pageSize, Long taskId, Long testcaseId) {
+    @GetMapping("/parameters")
+    public Result getParameters(Integer pageNumber, Integer pageSize, Long taskId, Long testcaseId) {
         return success(taskTestcaseParameterService.getByTaskIdAndTestcaseId(pageNumber, pageSize, taskId, testcaseId));
+    }
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/4 14:51
+     * @Param [parameterId]
+     * @return com.terry.iat.service.common.bean.Result
+     **/
+    @GetMapping("/parameter")
+    public Result getParameter(Long parameterId) {
+        return success(taskTestcaseParameterService.getById(parameterId));
     }
 
     /**
@@ -94,9 +105,9 @@ public class TaskController extends BaseController {
      * @Date 2019/2/20 11:31
      * @Param [pageNumber, pageSize, taskId, testcaseId]
      **/
-    @GetMapping("/keyword")
-    public Result getKeyword(Integer pageNumber, Integer pageSize, Long taskId, Long testcaseId,Long parameterId) {
-        return success(taskTestcaseKeywordService.getByTaskIdAndTestcaseId(pageNumber, pageSize, taskId, testcaseId,parameterId));
+    @GetMapping("/keywords")
+    public Result getKeywords(Integer pageNumber, Integer pageSize, Long taskId, Long testcaseId, Long parameterId) {
+        return success(taskTestcaseKeywordService.getByTaskIdAndTestcaseId(pageNumber, pageSize, taskId, testcaseId, parameterId));
     }
 
     /**
@@ -106,10 +117,45 @@ public class TaskController extends BaseController {
      * @Date 2019/2/20 11:32
      * @Param [pageNumber, pageSize, taskId, testcaseId, keywordId]
      **/
-    @GetMapping("/api")
-    public Result getApis(Integer pageNumber, Integer pageSize, Long taskId, Long testcaseId,Long parameterId, Long testcaseKeywordId, Long keywordId) {
-        return success(taskTestcaseKeywordApiService.getByTaskIdAndTestcaseIdAndKeywordId(pageNumber, pageSize, taskId, testcaseId,parameterId, testcaseKeywordId, keywordId));
+    @GetMapping("/apis")
+    public Result getApis(Integer pageNumber, Integer pageSize, Long taskId, Long testcaseId, Long parameterId, Long testcaseKeywordId, Long keywordId) {
+        return success(taskTestcaseKeywordApiService.getByTaskIdAndTestcaseIdAndKeywordId(pageNumber, pageSize, taskId, testcaseId, parameterId, testcaseKeywordId, keywordId));
     }
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/4 13:29
+     * @Param [taskId, testcaseId, testcaseKeywordId, keywordId, keywordApiId, apiId]
+     * @return com.terry.iat.service.common.bean.Result
+     **/
+    @GetMapping("/api")
+    public Result getApi(Long taskId, Long testcaseId, Long testcaseKeywordId, Long keywordId,Long keywordApiId,Long apiId) {
+        return success(taskTestcaseKeywordApiService.get(taskId, testcaseId, testcaseKeywordId, keywordId,keywordApiId,apiId));
+    }
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/3 20:05
+     * @Param [taskId]
+     * @return com.terry.iat.service.common.bean.Result
+     **/
+    @GetMapping("/detail")
+    public Result detail(Long taskId) {
+        return success(taskService.detail(taskId));
+    }
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/4 13:01
+     * @Param [taskId, testcaseId, parameterId, testcaseKeywordId, keywordId, keywordApiId, apiId]
+     * @return com.terry.iat.service.common.bean.Result
+     **/
+    @GetMapping("/result/api")
+    public Result getApiResult(Long taskId, Long testcaseId, Long parameterId,Long testcaseKeywordId, Long keywordId,Long keywordApiId, Long apiId) {
+        return success(taskTestcaseKeywordApiResultService.get(taskId,testcaseId,parameterId,testcaseKeywordId,keywordId,keywordApiId,apiId));
+    }
+
+
 
     /**
      * @return com.terry.iat.service.common.bean.Result
@@ -121,7 +167,7 @@ public class TaskController extends BaseController {
     @IgnoreLogin
     @GetMapping("/get")
     public Result get(String client, String key) {
-        return success(taskService.get(client,key));
+        return success(taskService.get(client, key));
     }
 
     /**

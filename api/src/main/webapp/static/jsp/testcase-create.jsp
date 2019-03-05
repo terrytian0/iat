@@ -91,7 +91,7 @@
             success: function (msg) {
                 if (msg.status) {
                     window.location.href =
-                        "/static/jsp/iat.jsp";
+                        "/static/jsp/testcase.jsp";
                 } else if (msg.code == "D0000104") {
                     window.location.href = "/login.jsp";
                 } else {

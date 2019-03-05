@@ -273,6 +273,9 @@ public class HttpDriver {
 
     private static Map<String, String> replaceParameters(List items, Map<String, String> parameters) {
         Map<String, String> requestFormdata = new HashMap<>();
+        if(items==null){
+            return requestFormdata;
+        }
         for (Object item : items) {
             String dvalue = "";
             String name = "";

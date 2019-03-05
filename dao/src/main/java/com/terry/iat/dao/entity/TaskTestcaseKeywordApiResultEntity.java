@@ -36,6 +36,10 @@ public class TaskTestcaseKeywordApiResultEntity extends BaseEntity{
     private Long keywordApiId;
     @Column(name = "api_id")
     private Long apiId;
+    @Column(name = "url")
+    private String url;
+    @Column(name = "method")
+    private String method;
     @Column(name = "request_headers")
     private String requestHeaders;
     @Column(name = "request_formdatas")

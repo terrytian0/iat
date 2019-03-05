@@ -53,8 +53,9 @@ public class FormDataController extends BaseController {
      * @param apiId
      * @return
      */
-    @RequestMapping(value = "",method = RequestMethod.GET)
+    @RequestMapping(value = "/get",method = RequestMethod.GET)
     public Result get(Long apiId){
         return success(formDataService.getByApiId(apiId));
     }
+
 }

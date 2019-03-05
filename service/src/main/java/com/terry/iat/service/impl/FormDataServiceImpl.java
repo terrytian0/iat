@@ -125,7 +125,12 @@ public class FormDataServiceImpl extends BaseServiceImpl implements FormDataServ
     public FormDataEntity update(FormDataVO formDataVO) {
         FormDataEntity formDataEntity = formDataMapper.selectByPrimaryKey(formDataVO.getId());
         if (formDataEntity == null) {
-            throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("FormData不存在"));
+            List<FormDataEntity> formDataEntityList = create(Arrays.asList(formDataVO));
+            if(!formDataEntityList.isEmpty()){
+                return formDataEntityList.get(0);
+            }else{
+                throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("修改form data失败！"));
+            }
         }
         formDataEntity.setDefaultValue(formDataVO.getDefaultValue());
         formDataEntity.setName(formDataVO.getName());

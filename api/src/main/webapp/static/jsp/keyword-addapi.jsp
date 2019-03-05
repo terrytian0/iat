@@ -226,7 +226,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "关键字添加Api失败！errormsg=" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                     clicktag = 0;

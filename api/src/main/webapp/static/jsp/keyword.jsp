@@ -390,9 +390,6 @@
                     field: 'id',
                     visible: false
                 }, {
-                    title: '名称',
-                    field: 'detail.name'
-                }, {
                     title: '路径',
                     field: 'detail.path'
                 }, {
@@ -400,12 +397,16 @@
                     field: 'detail.method',
                     formatter: methodFormatter
                 }, {
+                    title: '名称',
+                    field: 'detail.name'
+                }, {
                     title: 'ApiID',
                     field: 'apiId',
                     visible: false
                 }, {
                     title: '排序',
-                    field: 'idx'
+                    field: 'idx',
+                    visible: false
                 }, {
                     title: '操作',
                     field: 'button',

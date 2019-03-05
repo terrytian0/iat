@@ -129,7 +129,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "删除testcase失败！errormsg=" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }
@@ -355,9 +355,6 @@
                     field: 'id',
                     visible: false
                 }, {
-                    title: '排序',
-                    field: 'idx'
-                }, {
                     title: '名称',
                     field: 'detail.name'
                 }, {
@@ -367,6 +364,10 @@
                     title: '创建时间',
                     field: 'detail.createTime',
                     formatter: dateFormatter
+                }, {
+                    title: '排序',
+                    field: 'idx',
+                    visible: false
                 }, {
                     title: '操作',
                     field: 'button',

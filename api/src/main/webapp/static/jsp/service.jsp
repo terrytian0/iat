@@ -53,7 +53,6 @@
 <script src="/static/js/plugins/cookie/jquery.cookie.js"></script>
 
 
-
 <script>
 
     $(window).resize(function () {
@@ -65,6 +64,7 @@
     window.onload = function () {
         initServiceTable();
     };
+
     function refreshServiceTable() {
         $('#serviceTable').bootstrapTable('refresh', {
             pageNumber: 1,
@@ -169,21 +169,20 @@
     }
 
 
-
     function serviceOptFormatter(value, row, index) {
         return "<a class=\"fa fa-edit\" style=\"width: 14px\"  id=\"" + row.id + "\"  onclick=\"updateService(this)\"></a>"
             + "&nbsp;&nbsp;<a class=\"fa fa-remove\" style=\"width: 14px\"  id=\"" + row.id + "\"  onclick=\"deleteService(this)\"></a>"
     }
 
     function updateService(obj) {
-        window.location.href = "/static/jsp/service-create.jsp?serviceId="+obj.id;
+        window.location.href = "/static/jsp/service-create.jsp?serviceId=" + obj.id;
     }
-    
+
     function deleteService(obj) {
         $.ajax({
             type: "delete",
             dataType: "json",
-            url: "/service/delete?id="+obj.id,
+            url: "/service/delete?id=" + obj.id,
             async: false,
             contentType: "application/json; charset=utf-8",
             beforeSend: function (request) {
@@ -197,13 +196,13 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "删除服务失败。\n" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }
             },
-            error:function (xhr,exception) {
-                error(xhr,exception);
+            error: function (xhr, exception) {
+                error(xhr, exception);
             }
         });
     }

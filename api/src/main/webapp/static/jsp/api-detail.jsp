@@ -205,6 +205,9 @@
     <a class="btn btn-primary btn-sm" id="addHeader">添加</a>
 </div>
 
+<div id="formdataToolBar" class="btn-group">
+    <a class="btn btn-primary btn-sm" id="addFormdata">添加</a>
+</div>
 
 <!-- 全局js -->
 <script src="/static/js/jquery.min.js?v=2.1.4"></script>
@@ -236,15 +239,20 @@
 
     $("#addHeader").click(function () {
         var count = $('#headerTable').bootstrapTable('getData').length;
+        var uniqueId = new Date().getTime();
         var row = "{";
-        // var titleLength = Object.getOwnPropertyNames(title).length;
-        // for (var key in title) {
-        //     row = row + key + ":" + "'" + title[key] + "',";
-        // }
-        // var timestamp = (new Date()).getTime();
-        // row = row + "rowNum:" + "'unique-" + timestamp + "'";
+        row = row + "\"rowNum\":" + uniqueId;
         row = row + "}";
         $('#headerTable').bootstrapTable('insertRow', {index: count, row: eval("(" + row + ")")});
+    });
+
+    $("#addFormdata").click(function () {
+        var count = $('#formdataTable').bootstrapTable('getData').length;
+        var uniqueId = new Date().getTime();
+        var row = "{";
+        row = row + "\"rowNum\":" + uniqueId;
+        row = row + "}";
+        $('#formdataTable').bootstrapTable('insertRow', {index: count, row: eval("(" + row + ")")});
     });
 
     function getApi() {
@@ -280,7 +288,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "创建关键字失败，errormsg=" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }
@@ -306,7 +314,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "获取Api参数失败！" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }
@@ -338,14 +346,14 @@
     }
 
     function headerOptFormatter(value, row, index) {
-        return "<a class=\"btn btn-danger btn-sm\" id=\"" + row.id + "\" onclick=\"deleteHeader(this)\" >删除</a>";
+        return "<a class=\"btn btn-danger btn-sm\" id=\"headerDelete\">删除</a>";
     }
 
     function getHeader(apiId) {
         var data;
         $.ajax({
             type: "get",
-            url: "/api/header/get?apiId="+apiId,
+            url: "/api/header/get?apiId=" + apiId,
             dataType: 'json',
             async: false,
             contentType: "application/json; charset=utf-8",
@@ -354,7 +362,7 @@
             },
             success: function (msg) {
                 if (msg.status) {
-                    data =msg.content;
+                    data = msg.content;
                 } else if (msg.code == "D0000104") {
                     window.location.href = "/login.jsp";
                 } else {
@@ -370,11 +378,62 @@
         });
         return data;
     }
-    
+
+    function getFormdata(apiId) {
+        var data;
+        $.ajax({
+            type: "get",
+            url: "/api/form-data/get?apiId=" + apiId,
+            dataType: 'json',
+            async: false,
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (request) {
+                request.setRequestHeader("Authentication", $.cookie("Authentication"));
+            },
+            success: function (msg) {
+                if (msg.status) {
+                    data = msg.content;
+                } else if (msg.code == "D0000104") {
+                    window.location.href = "/login.jsp";
+                } else {
+                    swal({
+                        title: "提示！",
+                        text: msg.message,
+                        type: "error"
+                    });
+                }
+
+            }
+
+        });
+        return data;
+    }
+
+    window.operateEvents = {
+        'click #headerDelete': function (e, value, row, index) {
+            if (row.rowNum != undefined) {
+                $('#headerTable').bootstrapTable('remove', {field: 'rowNum', values: [row.rowNum]});
+            } else {
+                deleteHeader(row);
+            }
+        },
+        'click #formdataDelete': function (e, value, row, index) {
+            if (row.rowNum != undefined) {
+                $('#formdataTable').bootstrapTable('remove', {field: 'rowNum', values: [row.rowNum]});
+            } else {
+                deleteFormdata(row);
+            }
+        }
+    };
+
+    function formdataOptFormatter(value, row, index) {
+        return "<a class=\"btn btn-danger btn-sm\" id=\"formdataDelete\">删除</a>";
+    }
+
     function deleteHeader(obj) {
         $.ajax({
             type: "delete",
-            url: "/api/header/delete?headerId="+obj.id,
+            url: "/api/header/delete?headerId=" + obj.id,
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             beforeSend: function (request) {
@@ -385,6 +444,37 @@
                     $('#headerTable').bootstrapTable("destroy");
                     var data = getHeader(apiId);
                     initHeaderTable(data);
+                } else if (msg.code == "D0000104") {
+                    window.location.href = "/login.jsp";
+                } else {
+                    swal({
+                        title: "提示！",
+                        text: msg.message,
+                        type: "error"
+                    });
+                }
+
+            }
+
+        });
+    }
+
+    function deleteFormdata(obj) {
+        var data="["+obj.id+"]";
+        $.ajax({
+            type: "delete",
+            url: "/api/form-data/delete",
+            data:data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (request) {
+                request.setRequestHeader("Authentication", $.cookie("Authentication"));
+            },
+            success: function (msg) {
+                if (msg.status) {
+                    $('#formdataTable').bootstrapTable("destroy");
+                    var data = getFormdata(apiId);
+                    initFormdataTable(data);
                 } else if (msg.code == "D0000104") {
                     window.location.href = "/login.jsp";
                 } else {
@@ -428,6 +518,7 @@
                     title: '操作',
                     field: 'button',
                     align: 'center',
+                    events: "operateEvents",
                     formatter: headerOptFormatter,
                     width: 150
                 }],
@@ -462,12 +553,15 @@
                             $('#headerTable').bootstrapTable("destroy");
                             var data = getHeader(apiId);
                             initHeaderTable(data);
+                            $('#parameterTable').bootstrapTable("destroy");
+                            var pdata = getParamters(apiId);
+                            initParameterTable(pdata);
                         } else if (msg.code == "D0000104") {
                             window.location.href = "/login.jsp";
                         } else {
                             swal({
                                 title: "提示！",
-                                text: "修改header失败！errormsg=" + msg.errorMsg,
+                                text: msg.message,
                                 type: "error"
                             });
                         }
@@ -502,6 +596,7 @@
             data: data,
             dataType: "json",
             idField: "id",
+            toolbar: "#formdataToolBar",
             columns: [
                 {
                     title: '序号',
@@ -520,13 +615,31 @@
                     title: '默认值',
                     field: 'defaultValue',
                     editable: true
-                }],
+                }, {
+                    title: '操作',
+                    field: 'button',
+                    align: 'center',
+                    events: "operateEvents",
+                    formatter: formdataOptFormatter,
+                    width: 150
+                }
+                ],
             onEditableSave: function (field, row, oldValue, $el) {
                 var data = "{";
-                data = data + "\"id\":" + row.id + ",";
-                data = data + "\"name\":\"" + row.name + "\",";
-                data = data + "\"type\":\"" + row.type + "\",";
-                data = data + "\"defaultValue\":\"" + row.defaultValue + "\"";
+                if(row.id!=undefined){
+                    data = data + "\"id\":" + row.id + ",";
+                }
+                if(row.name!=undefined){
+                    data = data + "\"name\":\"" + row.name + "\",";
+                }
+                if(row.type!=undefined){
+                    data = data + "\"type\":\"" + row.type + "\",";
+                }
+
+                if(row.defaultValue!=undefined){
+                    data = data + "\"defaultValue\":\"" + row.defaultValue + "\",";
+                }
+                data = data + "\"apiId\":" + apiId + "";
                 data = data + "}";
                 $.ajax({
                     type: "put",
@@ -539,12 +652,18 @@
                     },
                     success: function (msg) {
                         if (msg.status) {
+                            $('#formdataTable').bootstrapTable("destroy");
+                            var data = getFormdata(apiId);
+                            initFormdataTable(data);
+                            $('#parameterTable').bootstrapTable("destroy");
+                            var pdata = getParamters(apiId);
+                            initParameterTable(pdata);
                         } else if (msg.code == "D0000104") {
                             window.location.href = "/login.jsp";
                         } else {
                             swal({
                                 title: "提示！",
-                                text: "修改form data失败！errormsg=" + msg.errorMsg,
+                                text: msg.message,
                                 type: "error"
                             });
                         }
@@ -601,7 +720,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "Api Debug错误！errormsg=" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }
@@ -711,7 +830,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "修改Api失败！errormsg=" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }
