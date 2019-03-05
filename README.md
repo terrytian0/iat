@@ -56,11 +56,24 @@ public class SwaggerListener implements ApplicationListener<ContextRefreshedEven
 ### Spring boot
 
 ## 手动添加
+### 接口列表
++ 通过服务下拉列表（只有服务成员才能查看），可以查询不同服务的接口。
++ 点击“创建”按钮，进入接口创建页面。
++ 点击“修改”操作按钮，进入接口修改页面。
++ 点击“删除”操作按钮，删除接口。（软删除）
 ![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/api-list.jpg)
+### 创建接口
++ 在接口列表，点击“创建”按钮，进入接口创建页面。
+![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/api-create.jpg)
+### 修改接口
++ 在接口列表，点击“修改”操作按钮，进入接口修改页面。
+![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/api-update.jpg)
 
-## 调试
-+ 参数化
-
+### 接口调试
++ Header、Form Data、Body中，都可以将对应的默认值进行参数化，格式为：#{参数名称}，如上图。
++ 参数化后，在Request Parameter中设置参数。
++ 点击调试按钮，选择调试环境（调试环境在服务管理中设置，参考服务管理->环境设置），系统会返回调试结果，如下图：
+![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/api-update.jpg)
 
 ## 关键字
 
