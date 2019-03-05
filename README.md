@@ -70,10 +70,13 @@ public class SwaggerListener implements ApplicationListener<ContextRefreshedEven
 ![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/api-update.jpg)
 
 ### 接口调试
-+ Header、Form Data、Body中，都可以将对应的默认值进行参数化，格式为：#{参数名称}，如上图。
+#### 参数化
++ Header、Form Data、Body中，都可以将对应的默认值进行参数化，格式为：#{参数名称}，如下图：
+![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/api-update.jpg)
+#### 调试
 + 参数化后，在Request Parameter中设置参数。
 + 点击调试按钮，选择调试环境（调试环境在服务管理中设置，参考服务管理->环境设置），系统会返回调试结果，如下图：
-![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/api-update.jpg)
+![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/api-debug.jpg)
 
 ## 关键字
 
