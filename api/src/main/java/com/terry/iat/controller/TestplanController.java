@@ -151,5 +151,28 @@ public class TestplanController extends BaseController {
         testplanService.createEnv(envs);
         return success();
     }
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 16:20
+     * @Param []
+     * @return com.terry.iat.service.common.bean.Result
+     **/
+    @GetMapping("/count")
+    public Result count() {
+        return success(testplanService.getCount());
+    }
+
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 16:49
+     * @Param []
+     * @return com.terry.iat.service.common.bean.Result
+     **/
+    @GetMapping(path = "/week-chart")
+    public Result getWeekChart(){
+        return success(testplanService.getWeekChart());
+    }
 
 }

@@ -8,6 +8,7 @@ import com.terry.iat.service.*;
 import com.terry.iat.service.common.base.BaseServiceImpl;
 import com.terry.iat.service.common.bean.ResultCode;
 import com.terry.iat.service.common.exception.BusinessException;
+import com.terry.iat.service.common.utils.DateUtils;
 import com.terry.iat.service.core.HttpResult;
 import com.terry.iat.service.core.KeywordResult;
 import com.terry.iat.service.core.TestcaseResult;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.text.ParseException;
 import java.util.*;
 
 
@@ -61,7 +63,7 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
 
     @Override
     public PageInfo getByServiceId(Integer pn, Integer ps, String searchText, Long serviceId) {
-       return getByServiceIdAndNotInIds(pn,ps,searchText,serviceId,null);
+        return getByServiceIdAndNotInIds(pn, ps, searchText, serviceId, null);
     }
 
     @Override
@@ -75,8 +77,8 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("serviceId", serviceId);
         criteria.andLike("name", key);
-        if(ids!=null&&!ids.isEmpty()){
-            criteria.andNotIn("id",ids);
+        if (ids != null && !ids.isEmpty()) {
+            criteria.andNotIn("id", ids);
         }
         example.orderBy("id").desc();
         return new PageInfo(testcaseMapper.selectByExample(example));
@@ -149,10 +151,82 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
 
     @Override
     public List<TestcaseEntity> getByIds(List<Long> testcaseIds) {
-        if(testcaseIds.isEmpty()){
+        if (testcaseIds.isEmpty()) {
             return Collections.EMPTY_LIST;
         }
         return testcaseMapper.selectByIds(listToString(testcaseIds));
+    }
+
+    @Override
+    public Integer getCount() {
+        List<TestcaseEntity> testcaseEntityList = testcaseMapper.selectAll();
+        if (testcaseEntityList == null) {
+            return 0;
+        }
+        Integer count = 0;
+        for (TestcaseEntity testcaseEntity : testcaseEntityList) {
+            Integer pCount = parameterValueService.getCountByTestcaseId(testcaseEntity.getId());
+            if (pCount == 0) {
+                count++;
+            } else {
+                count = count + pCount;
+            }
+        }
+        return count;
+    }
+
+    @Override
+    public List<Map<String, Object>> getWeekChart() {
+        List<Map<String, Object>> chart = new ArrayList<>();
+        try {
+            Date currentDate = new Date();
+            Date startDate = DateUtils.getDate("2019-01-01", "yyyy-MM-dd");
+            startDate = DateUtils.getFirstDayOfWeek(startDate);
+            Date lastDate;
+            int total = 0;
+            while (startDate.before(currentDate)) {
+                startDate = DateUtils.addDay(startDate, 7);
+                if (startDate.after(currentDate)) {
+                    startDate = currentDate;
+                }
+                lastDate = DateUtils.addDay(startDate, -7);
+                String date = DateUtils.getDate(startDate, "yyyy-MM-dd");
+                total = total + getWeekCount(lastDate, startDate);
+                Map<String, Object> d = new HashMap<>();
+                d.put("time", date);
+                d.put("count", total);
+                chart.add(d);
+
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return chart;
+    }
+
+    private Integer getWeekCount(Date bDate, Date eDate) {
+        List<TestcaseEntity> testcaseEntityList = get(bDate, eDate);
+        if (testcaseEntityList == null) {
+            return 0;
+        }
+        Integer count = 0;
+        for (TestcaseEntity testcaseEntity : testcaseEntityList) {
+            int pCount = parameterValueService.getCountByTestcaseId(testcaseEntity.getId());
+            if (pCount == 0) {
+                count++;
+            } else {
+                count = count + pCount;
+            }
+        }
+        return count;
+    }
+
+    private List<TestcaseEntity> get(Date bDate, Date eDate) {
+        Example example = new Example(TaskEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andGreaterThanOrEqualTo("createTime", bDate);
+        criteria.andLessThan("createTime", eDate);
+        return testcaseMapper.selectByExample(example);
     }
 
     @Override
@@ -188,7 +262,7 @@ public class TestcaseServiceImpl extends BaseServiceImpl implements TestcaseServ
         }
         for (Long id : ids) {
             List<TestplanTestcaseEntity> testplanTestcaseEntityList = testplanTestcaseService.getByTestcaseId(id);
-            if(testplanTestcaseEntityList!=null&&!testplanTestcaseEntityList.isEmpty()){
+            if (testplanTestcaseEntityList != null && !testplanTestcaseEntityList.isEmpty()) {
                 throw new BusinessException(ResultCode.INVALID_PARAMS.setMessage("用例被测试计划引用，禁止删除！"));
             }
         }

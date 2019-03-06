@@ -172,4 +172,20 @@ public class TestcaseController extends BaseController {
     public Result deleteParameter(Long testcaseId,Integer rowNum){
         return success(parameterValueService.delete(testcaseId,rowNum));
     }
+
+    @GetMapping(path = "/count")
+    public Result count(){
+        return success(testcaseService.getCount());
+    }
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 17:41
+     * @Param []
+     * @return com.terry.iat.service.common.bean.Result
+     **/
+    @GetMapping(path = "/week-chart")
+    public Result getWeekChart(){
+        return success(testcaseService.getWeekChart());
+    }
 }

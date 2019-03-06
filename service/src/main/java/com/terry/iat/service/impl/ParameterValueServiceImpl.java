@@ -50,6 +50,7 @@ public class ParameterValueServiceImpl extends BaseServiceImpl implements Parame
         return data;
     }
 
+
     @Override
     public int deleteByKeyIds(List<Long> ids) {
         if (ids.isEmpty()) {
@@ -117,5 +118,10 @@ public class ParameterValueServiceImpl extends BaseServiceImpl implements Parame
         criteria.andEqualTo("testcaseId", testcaseId);
         criteria.andEqualTo("rowNum", rowNum);
         return parameterValueMapper.deleteByExample(example);
+    }
+
+    @Override
+    public Integer getCountByTestcaseId(Long testcaseId) {
+        return parameterValueMapper.getCountByTestcaseId(testcaseId);
     }
 }

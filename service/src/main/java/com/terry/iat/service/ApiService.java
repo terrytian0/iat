@@ -108,6 +108,29 @@ public interface ApiService {
      * @return
      */
     List<ParameterVO> getParameters(Long apiId);
-
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 16:06
+     * @Param [apiEntity]
+     * @return java.util.Set<java.lang.String>
+     **/
     Set<String> getParameters(ApiEntity apiEntity);
+
+    /**
+     * @Description TODO
+     * @author terry          
+     * @Date 2019/3/6 16:06
+     * @Param []
+     * @return java.lang.Long
+     **/
+    Integer getCount();
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 16:39
+     * @Param []
+     * @return java.util.List<java.util.Map<java.lang.String,java.lang.String>>
+     **/
+    List<Map<String,Object>> getWeekChart();
 }

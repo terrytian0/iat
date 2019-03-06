@@ -30,4 +30,13 @@ public interface ParameterValueService {
      * @return
      */
     int delete(Long testcaseId,Integer rowNum);
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 18:14
+     * @Param [testcaseId]
+     * @return java.lang.Integer
+     **/
+    Integer getCountByTestcaseId(Long testcaseId);
+
 }

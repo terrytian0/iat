@@ -11,4 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface ParameterValueMapper  extends BaseMapper<ParameterValueEntity> {
     @Select("SELECT MAX(row_num) FROM parameter_value WHERE testcase_id=#{testcaseId}")
     Integer getMaxRowNum(Long testcaseId);
+
+    @Select("SELECT count(DISTINCT row_num) FROM parameter_value WHERE testcase_id=#{testcaseId} ")
+    Integer getCountByTestcaseId(Long testcaseId);
 }

@@ -100,4 +100,21 @@ public interface TestcaseService {
      * @return java.util.List<com.terry.iat.dao.entity.TestcaseEntity>
      **/
     List<TestcaseEntity> getByIds(List<Long> testcaseIds);
+
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 16:14
+     * @Param []
+     * @return java.lang.Integer
+     **/
+    Integer getCount();
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 17:41
+     * @Param []
+     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     **/
+    List<Map<String, Object>> getWeekChart();
 }

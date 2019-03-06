@@ -125,4 +125,27 @@ public class ApiController extends BaseController {
     public Result getParameters(Long apiId){
         return success(apiService.getParameters(apiId));
     }
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 16:19
+     * @Param []
+     * @return com.terry.iat.service.common.bean.Result
+     **/
+    @GetMapping(path = "/count")
+    public Result getCount(){
+        return success(apiService.getCount());
+    }
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 16:49
+     * @Param []
+     * @return com.terry.iat.service.common.bean.Result
+     **/
+    @GetMapping(path = "/week-chart")
+    public Result getWeekChart(){
+        return success(apiService.getWeekChart());
+    }
+
 }

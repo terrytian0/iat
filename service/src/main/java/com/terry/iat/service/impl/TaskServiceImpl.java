@@ -9,6 +9,7 @@ import com.terry.iat.service.common.base.BaseServiceImpl;
 import com.terry.iat.service.common.bean.ResultCode;
 import com.terry.iat.service.common.enums.TaskStatus;
 import com.terry.iat.service.common.exception.BusinessException;
+import com.terry.iat.service.common.utils.DateUtils;
 import com.terry.iat.service.vo.NodeVO;
 import com.terry.iat.service.vo.TaskResultVO;
 import com.terry.iat.service.vo.TestplanEnvVO;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -263,6 +265,44 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Integer getCount() {
+        return taskMapper.selectCount(new TaskEntity());
+    }
+
+    @Override
+    public List<Map<String, Object>> getWeekChart() {
+        List<Map<String, Object>> chart = new ArrayList<>();
+        try {
+            Date currentDate = new Date();
+            Date startDate = DateUtils.getDate("2019-01-01","yyyy-MM-dd");
+            startDate = DateUtils.getFirstDayOfWeek(startDate);
+            while (startDate.before(currentDate)) {
+                startDate = DateUtils.addDay(startDate, 7);
+                if (startDate.after(currentDate)) {
+                    startDate = currentDate;
+                }
+                String date = DateUtils.getDate(startDate, "yyyy-MM-dd");
+                Integer count = getCount(startDate);
+                Map<String,Object> d = new HashMap<>();
+                d.put("time",date);
+                d.put("count",count);
+                chart.add(d);
+
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return chart;
+    }
+
+    private Integer getCount(Date date){
+        Example example = new Example(TaskEntity.class);
+        Example.Criteria criteria =  example.createCriteria();
+        criteria.andLessThan("createTime",date);
+        return taskMapper.selectCountByExample(example);
     }
 
     private synchronized TaskEntity getByNoRun(String client) {

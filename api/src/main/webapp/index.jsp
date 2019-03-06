@@ -35,7 +35,7 @@
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element">
-                        <a data-toggle="dropdown" class="dropdown-toggle navbar-minimalize" href="#">
+                        <a href="index.jsp">
                                 <span class="clear">
                                     <span class="block m-t-xs">
                                         <div style="float: left"></div>
@@ -153,7 +153,7 @@
             </nav>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe id="J_iframe" width="100%" height="100%" frameborder="0" src="/static/jsp/testtask.jsp" seamless>
+            <iframe id="J_iframe" width="100%" height="100%" frameborder="0" src="/static/jsp/dashboard.jsp" seamless>
             </iframe>
         </div>
     </div>
@@ -208,10 +208,10 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                        <label class="col-md-2 text-right">用户名：</label>
-                        <div class="col-md-10  pull-left">
-                            <input type="text" class="form-control" id="name" aria-required="true">
-                        </div>
+                    <label class="col-md-2 text-right">用户名：</label>
+                    <div class="col-md-10  pull-left">
+                        <input type="text" class="form-control" id="name" aria-required="true">
+                    </div>
                 </div>
                 <br>
                 <div class="row">
@@ -264,7 +264,7 @@
                 } else {
                     swal({
                         title: "提示！",
-                        text: "删除Api失败！\n" + msg.errorMsg,
+                        text: msg.message,
                         type: "error"
                     });
                 }

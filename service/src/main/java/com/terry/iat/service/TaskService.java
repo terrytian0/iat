@@ -11,6 +11,7 @@ import com.terry.iat.service.vo.TestplanVO;
 import javafx.concurrent.Task;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description 测试任务服务
@@ -70,4 +71,23 @@ public interface TaskService {
      * @return java.lang.Boolean
      **/
     Boolean updateStatus(TaskResultVO taskResultVO);
+
+
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 16:21
+     * @Param []
+     * @return java.lang.Integer
+     **/
+    Integer getCount();
+
+    /**
+     * @Description TODO
+     * @author terry
+     * @Date 2019/3/6 16:39
+     * @Param []
+     * @return java.util.List<java.util.Map<java.lang.String,java.lang.String>>
+     **/
+    List<Map<String,Object>> getWeekChart();
 }

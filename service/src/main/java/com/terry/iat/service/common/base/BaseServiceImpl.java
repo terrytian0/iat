@@ -4,13 +4,16 @@ import com.terry.iat.service.common.bean.ResultCode;
 import com.terry.iat.service.common.exception.BusinessException;
 import com.terry.iat.dao.entity.UserEntity;
 import com.terry.iat.service.common.content.WebContext;
+import com.terry.iat.service.common.utils.DateUtils;
 import com.terry.iat.service.vo.ParameterVO;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.xml.crypto.Data;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -110,4 +113,8 @@ public abstract class BaseServiceImpl {
         return var2.toString();
     }
 
+
+    public static void main(String[] args) throws ParseException {
+        System.out.println(DateUtils.getFirstDayOfWeek(new Date()));
+    }
 }
