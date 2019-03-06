@@ -102,6 +102,10 @@ public class SwaggerListener implements ApplicationListener<ContextRefreshedEven
 + 在关键字列表，点击“修改”操作按钮，进入关键字修改页面。
 + 在关键字修改页面，可以修改关键字名称和描述
 ![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/keyword-update.jpg)
+### 添加接口
++ 在关键字列表，点击“添加”操作按钮，进入接口选择页，选择需要添加的接口，可以将接口添加到关键字中。
+![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/keyword-addapi.jpg)
+
 ### 关键字调试
 #### 提取器
 + 在关键字修改页，点击对应接口的提取器按钮,可以给当前接口添加提取器。
@@ -123,6 +127,29 @@ public class SwaggerListener implements ApplicationListener<ContextRefreshedEven
 + 点击调试按钮，选择调试环境（调试环境在服务管理中设置，参考服务管理->环境设置），系统会返回调试结果。点击接口前的“+”按钮，可以查看接口详细测试结果。
 
 ## 测试用例
+### 测试用例列表
++ 通过服务下拉列表（只有服务成员才能查看），可以查询不同服务的测试用例。
++ 点击“创建”按钮，进入测试用例创建页面。
++ 点击“修改”操作按钮，进入测试用例修改页面。
++ 点击“删除”操作按钮，删除测试用例。
++ 点击“添加”操作按钮，可以向参数用例中添加关键字。
++ 点击测试用例前的“+”按钮，可以查看当前测试用例中的关键字。关键字后的“上移”和“下移”按钮，可以对关键字排序，删除按钮可以将关键字从测试用例中移除。
+![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/testcase-list.jpg)
+### 添加测试用例
++ 在测试用例列表，点击创建按钮，进入测试用例创建页面，在创建页面只需填写测试用例名称和描述。
+![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/testcase-create.jpg)
+### 添加关键字
++ 在测试用例列表，点击“添加”操作按钮，进入关键字选择页，选择需要添加的关键字，可以将关键字添加到测试用例中。
+![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/testcase-addkeyword.jpg)
+### 修改关键字
++ 在测试用例列表，点击“修改”操作按钮，进入测试用例修改页面。
++ 在测试用例修改页面，可以修改参数用例名称和描述
+![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/keyword-update.jpg)
+### 参数化
++ 在测试用例修改页，parameter中可以添加不同的测试参数值。后续测试过程中，会逐条测试每个参数。
+### 调试
++ 选择需要调试的参数，可以调试当前参数组合。
++ 在关键字列表，可以通过点击“+”查看调试详情。
 
 ## 测试计划
 
