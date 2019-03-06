@@ -7,8 +7,16 @@ Demo地址：http://2338ih6134.iask.in:38904
 
 # 部署
 ## 数据库
++ 搭建Mysql数据库
++ 下载数据库初始化脚本，并执行。
++ 脚本地址：https://github.com/terrytian0/iat/blob/master/dao/sql/iat-v0.1.sql
 
 ## Docker部署
++ 将Docker目录中的脚本下载到本地。
++ 将Build好的war包，存放到相同的目录下。
++ 修改jdbc.properties，填入本地数据库地址。
++ 执行“build.sh”脚本，构建docker镜像。
++ 执行“start.sh”脚本，启动docker容器。
 
 # 用户手册
 ## 首页
