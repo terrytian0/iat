@@ -18,6 +18,9 @@ Demo地址：http://2338ih6134.iask.in:38904
 + 执行“build.sh”脚本，构建docker镜像。
 + 执行“start.sh”脚本，启动docker容器。
 
+## 依赖部署
++ https://github.com/terrytian0/iat-client
+
 # 用户手册
 ## 首页
 ![avatar](https://raw.githubusercontent.com/terrytian0/iat/master/image/dashboard.jpg)
